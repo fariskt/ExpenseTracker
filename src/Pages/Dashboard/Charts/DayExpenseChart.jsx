@@ -16,7 +16,7 @@ const DayExpenseChart = () => {
       plotOptions: {
         bar: {
           horizontal: false,
-          columnWidth: "50%",
+          columnWidth: "45%",
         },
       },
       colors: [
@@ -92,11 +92,11 @@ const DayExpenseChart = () => {
   }, [expenses]);
 
   return (
-    <div className="bg-gray-800 rounded-md text-black md:w-[500px] md:h-[350px]">
-      <h3 className="text-white py-2 pl-4">Day-to-Day Expenses</h3>
+    <div className="bg-gray-800 rounded-md text-black py-2">
       <ReactApexChart
         options={dayToDayExpense.options}
         series={dayToDayExpense.series}
+        height={300}
         type="bar"
       />
     </div>

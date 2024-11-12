@@ -1,7 +1,9 @@
 import React, { useContext, useState } from "react";
 import AppContext from "../../../context/AppContext";
 
-const ExpenseFormModal = ({ setShowForm }) => {
+const ExpenseFormModal = ({
+  setShowForm,
+}) => {
   const { setExpenses } = useContext(AppContext);
   const [formData, setFormData] = useState({
     id: Date.now(),
@@ -31,7 +33,7 @@ const ExpenseFormModal = ({ setShowForm }) => {
 
     setExpenses((prev) => [...prev, expenseForm]);
     setFormData({
-      id:Date.now(),
+      id: Date.now(),
       subject: "",
       category: "",
       amount: "",

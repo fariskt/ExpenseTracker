@@ -4,6 +4,7 @@ import DashBoard from "./DashBoard";
 import ExpenseDetails from "../Pages/Expenses/ExpenseDetails";
 import TripDetails from "../Pages/Trips/TripDetails";
 import MobileSideBar from "./Sidebar/MobileSideBar";
+import AnalyticPage from "../Pages/Analytics/AnalyticPage";
 
 const Layout = () => {
   const [activePage, setActivePage] = useState("dashboard");
@@ -21,6 +22,7 @@ const Layout = () => {
     dashboard: <DashBoard />,
     expenses: <ExpenseDetails />,
     trip: <TripDetails />,
+    analytic : <AnalyticPage/>
   };
 
   return (
@@ -31,7 +33,7 @@ const Layout = () => {
         <SideBar setActivePage={setActivePage} activePage={activePage} />
       )}
 
-      <div className="flex-1 bg-[#040913] p-2">
+      <div className="flex-1 bg-[#040913] pb-10">
         {Pages[activePage] || <DashBoard />}
       </div>
     </div>

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import AppContext from "../../../context/AppContext";
+import AppContext from "../../context/AppContext";
 
-const MonExpenseChart = () => {
+const AnalyticPage = () => {
   const { expenses } = useContext(AppContext);
   const [monthlyExpense, setMonthlyExpenses] = useState({
     series: [],
@@ -18,6 +18,7 @@ const MonExpenseChart = () => {
           distributed: true,
         },
       },
+      colors: ["#33FF57"],
       dataLabels: {
         enabled: false,
       },
@@ -52,8 +53,8 @@ const MonExpenseChart = () => {
       },
       yaxis: {
         min: 0,
-        max: 10000,
-        tickAmount: 5,
+        max: 30000,
+        tickAmount: 6,
         labels: {
           style: {
             fontSize: "14px",
@@ -74,7 +75,7 @@ const MonExpenseChart = () => {
   };
 
   useEffect(() => {
-    const monthlyTotal = getMonthlyTotal(expenses);    
+    const monthlyTotal = getMonthlyTotal(expenses);
     setMonthlyExpenses((prev) => ({
       ...prev,
       series: [{ name: "Expenses", data: monthlyTotal }],
@@ -82,15 +83,19 @@ const MonExpenseChart = () => {
   }, [expenses]);
 
   return (
-    <div className="bg-gray-800 rounded-md text-black md:w-[500px] md:h-[350px]">
-      <h3 className="text-white pt-2 pl-4">Monthly Expenses</h3>
-      <ReactApexChart
-        options={monthlyExpense.options}
-        series={monthlyExpense.series}
-        type="bar"
-      />
+    <div className="mt-24 md:mt-10 md:ml-72 mx-auto bg-gray-900 md:w-[80%] w-[90%] md:p-10 p-2">
+      <h1 className="text-3xl py-5">Analytics</h1>
+      <div className="bg-gray-800 rounded-md text-black">
+        <h3 className="text-white py-4 pl-4">Monthly Expenses (2024)</h3>
+        <ReactApexChart
+          options={monthlyExpense.options}
+          series={monthlyExpense.series}
+          type="bar"
+          height={350}
+        />
+      </div>
     </div>
   );
 };
 
-export default MonExpenseChart;
+export default AnalyticPage;

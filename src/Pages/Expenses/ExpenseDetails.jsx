@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import AppContext from "../../context/AppContext";
 import { GiClothes } from "react-icons/gi";
 import { IoFastFood } from "react-icons/io5";
@@ -6,9 +6,11 @@ import { RiHospitalFill } from "react-icons/ri";
 import { BsFillFuelPumpFill } from "react-icons/bs";
 import { TbEdit } from "react-icons/tb";
 import { MdDeleteOutline } from "react-icons/md";
+import ExpenseFormModal from "../Dashboard/Forms/ExpenseForm";
 
 const ExpenseDetails = () => {
-  const { expenses, setExpenses } = useContext(AppContext);
+  const { expenses, setExpenses, showForm, setShowForm } =
+    useContext(AppContext);
 
   const getCategoryIcon = (category) => {
     switch (category.toLowerCase()) {
@@ -34,18 +36,25 @@ const ExpenseDetails = () => {
   const deleteExpense = (id) => {
     const filterdExpense = expenses.filter((item) => item.id !== id);
     setExpenses(filterdExpense);
-    localStorage.setItem("expenses", JSON.stringify(filterdExpense))
+    localStorage.setItem("expenses", JSON.stringify(filterdExpense));
   };
 
   return (
-    <div className="flex flex-col gap-8 pt-24 md:pt-16 md:pl-72 mx-auto md:px-10 px-2 bg-[#040913] min-h-screen">
-      <div className="flex ">
-        <h1 className="text-3xl font-bold text-white w-full">Expenses</h1>
-        <button className="w-40 bg-green-700 text-white rounded-md hover:bg-green-600 transition">
+    <div className="flex flex-col w-screen gap-8 pt-24 md:pt-16 md:pl-72 mx-auto md:px-10 px-2 bg-[#040913] min-h-screen">
+      <div className="flex justify-between">
+        <h1 className="text-2xl md:text-3xl font-bold text-white w-full">
+          Expenses
+        </h1>
+        <button
+          onClick={() => setShowForm("expenseForm")}
+          className="w-40 bg-green-700 text-sm font-bold md:text-base text-white rounded-md hover:bg-green-600 transition"
+        >
           + New Expense
         </button>
       </div>
-
+      {showForm === "expenseForm" && (
+        <ExpenseFormModal setShowForm={setShowForm} />
+      )}
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left text-gray-400 bg-gray-900 border-separate border-spacing-0">
           <thead className="bg-gray-800 text-gray-300">

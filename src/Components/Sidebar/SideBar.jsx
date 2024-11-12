@@ -11,7 +11,7 @@ const SideBar = ({ setActivePage, activePage }) => {
 
   return (
     <>
-      <div className=" md:flex md:fixed md:top-0 left-0 md:flex-col md:justify-between bg-[#0f172a] border-gray-400 md:w-[250px] md:h-full md:z-20 md:p-4">
+      <div className=" md:flex md:fixed md:top-0 left-0 md:flex-col bg-[#0f172a] border-gray-400 md:w-[250px] md:h-full md:z-20 md:p-4">
         <div className="flex flex-col items-center my-6 gap-4">
           <img
             className="h-20 w-20 rounded-full object-cover"
@@ -20,7 +20,7 @@ const SideBar = ({ setActivePage, activePage }) => {
           />
           <h5>{userName || "username"}</h5>
         </div>
-        <nav className="flex flex-col gap-4">
+        <nav className="flex flex-col gap-4 mt-10">
           <h4
             onClick={() => setActivePage("dashboard")}
             className={`cursor-pointer flex items-center gap-2 p-2 rounded-md hover:bg-gray-800 ${
@@ -45,15 +45,15 @@ const SideBar = ({ setActivePage, activePage }) => {
           >
             <GoGoal /> Trips
           </h4>
-          <h4 className="cursor-pointer flex items-center gap-2 p-2 rounded-md hover:bg-gray-800">
+          <h4
+            onClick={() => setActivePage("analytic")}
+            className={`${
+              activePage === "analytic" && "bg-gray-700 text-blue-400"
+            } flex items-center gap-2 text-base cursor-pointer hover:bg-gray-800 p-2 rounded-md duration-150`}
+          >
             <TbBrandGoogleAnalytics /> Analytics
           </h4>
         </nav>
-        <div className="ml-4 mb-4">
-          <h4 className="cursor-pointer flex items-center gap-2 p-2 rounded-md hover:bg-gray-800">
-            <IoSettingsOutline /> Logout
-          </h4>
-        </div>
       </div>
     </>
   );

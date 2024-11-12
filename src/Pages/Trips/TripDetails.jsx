@@ -1,18 +1,23 @@
 import React, { useContext } from "react";
 import AppContext from "../../context/AppContext";
 import { IoMdAirplane } from "react-icons/io";
+import TripFormModal from "../Dashboard/Forms/TripForm";
 
 const TripDetails = () => {
-  const { tripDetails } = useContext(AppContext);
+  const { tripDetails, showForm, setShowForm } = useContext(AppContext);
   return (
-    <div className="flex flex-col gap-8 pt-24 md:pt-16 md:pl-72 mx-auto px-2 md:px-10 bg-[#040913] min-h-screen">
+    <div className="flex flex-col gap-8 pt-24 w-screen md:pt-16 md:pl-72 mx-auto px-2 md:px-10 bg-[#040913] min-h-screen">
       <div className="flex">
-        <h1 className="text-3xl font-bold text-white w-full">Trip Details</h1>
-        <button className="w-40 bg-green-700 text-white rounded-md hover:bg-green-600 transition">
+        <h1 className="text-xl md:text-3xl font-bold text-white w-full">
+          Trip Details
+        </h1>
+        <button
+        onClick={()=> setShowForm("tripform")}
+         className="w-40 bg-green-700 text-white rounded-md hover:bg-green-600 transition">
           + New Trip
         </button>
       </div>
-
+      {showForm === "tripform" && <TripFormModal setShowForm={setShowForm} />}
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left text-gray-400 bg-gray-900 border-separate border-spacing-0">
           <thead className="bg-gray-800 text-gray-300">

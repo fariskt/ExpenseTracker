@@ -14,6 +14,8 @@ export const AppProvider = ({ children }) => {
   });
 
   const [userName, setUserName] = useState("");
+  const [showForm, setShowForm] = useState("");
+
 
   useEffect(() => {
     const storedName = localStorage.getItem("userName");
@@ -42,7 +44,9 @@ export const AppProvider = ({ children }) => {
     tripDetails,
     setTripDetails,
     setUserName,
-    userName
+    userName,
+    setShowForm,
+    showForm
   };
   return (
     <AppContext.Provider value={{ ...values }}>{children}</AppContext.Provider>
