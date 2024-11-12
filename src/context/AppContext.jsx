@@ -13,7 +13,21 @@ export const AppProvider = ({ children }) => {
     return savedTrip ? JSON.parse(savedTrip) : [];
   });
 
+  const [userName, setUserName] = useState("");
 
+  useEffect(() => {
+    const storedName = localStorage.getItem("userName");
+    if (!storedName) {
+      const enteredName = prompt("Please enter your name:");
+      if (enteredName) {
+        localStorage.setItem("userName", enteredName);
+        setUserName(enteredName);
+      }
+    } else {
+      setUserName(storedName);
+    }
+  }, []);
+  
   useEffect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses));
   }, [expenses]);
@@ -22,12 +36,13 @@ export const AppProvider = ({ children }) => {
     localStorage.setItem("tripDetails", JSON.stringify(tripDetails));
   }, [tripDetails]);
 
-
   const values = {
     expenses,
     setExpenses,
     tripDetails,
-    setTripDetails
+    setTripDetails,
+    setUserName,
+    userName
   };
   return (
     <AppContext.Provider value={{ ...values }}>{children}</AppContext.Provider>
