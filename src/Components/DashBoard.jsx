@@ -6,9 +6,9 @@ import PendingTask from "../Pages/Dashboard/PendingTask";
 
 const DashBoard = () => {
   return (
-    <div className="flex flex-col gap-8 pt-20 pl-80 mx-auto bg-[#040913]">
+    <div className="flex flex-col gap-8 pt-20 pl-4 md:pl-80 mx-auto bg-[#040913]">
       <QuickAccess />
-      <div className="flex justify-between w-[90%]">
+      <div className="flex flex-col md:flex-row gap-4 justify-between md:w-[90%]">
         <RecentExpenses />
         <PendingTask/>
       </div>

@@ -8,13 +8,19 @@ export const AppProvider = ({ children }) => {
     return savedExpense ? JSON.parse(savedExpense) : [];
   });
 
-  const [tripDetails, setTripDetails] = useState(()=> {
+  const [tripDetails, setTripDetails] = useState(() => {
     const savedTrip = localStorage.getItem("tripDetails");
-    return savedTrip ? JSON.parse(savedTrip) : []
-  })
+    return savedTrip ? JSON.parse(savedTrip) : [];
+  });
+
+
   useEffect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses));
   }, [expenses]);
+
+  useEffect(() => {
+    localStorage.setItem("tripDetails", JSON.stringify(tripDetails));
+  }, [tripDetails]);
 
 
   const values = {

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SideBar from "./Sidebar/SideBar";
 import DashBoard from "./DashBoard";
 import ExpenseDetails from "../Pages/Expenses/ExpenseDetails";
 import TripDetails from "../Pages/Trips/TripDetails";
+import AppContext from "../context/AppContext";
 
 const Layout = () => {
+  
   const [activePage, setActivePage] = useState("dashboard");
   const Pages = {
     dashboard: <DashBoard />,

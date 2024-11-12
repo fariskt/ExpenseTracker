@@ -9,7 +9,7 @@ import AppContext from "../../context/AppContext";
 const PendingTask = () => {
   const {expenses,tripDetails} = useContext(AppContext)
   return (
-    <div className="container border border-gray-700 rounded-lg w-[500px] bg-[#0f172a]">
+    <div className="container border border-gray-700 rounded-lg w-[95%] md:w-[500px] bg-[#0f172a]">
       <h1 className="text-base mb-4 border-b border-gray-700 p-2">
         Pending Task
       </h1>
@@ -21,7 +21,7 @@ const PendingTask = () => {
             </span>
             <p>Pending Approvals</p>
           </div>
-          <h4 className="font-bold">1</h4>
+          <h4 className="font-bold">0</h4>
         </div>
         <div className="flex justify-between items-center">
           <div className="flex py-2 px-4 gap-4 items-center">
@@ -48,7 +48,7 @@ const PendingTask = () => {
             </span>
             <p>Unreported Expenses</p>
           </div>
-          <h4 className="font-bold">14</h4>
+          <h4 className="font-bold">0</h4>
         </div>
       </div>
     </div>

@@ -5,8 +5,8 @@ import { IoMdAirplane } from "react-icons/io";
 const TripDetails = () => {
   const { tripDetails } = useContext(AppContext);
   return (
-    <div className="flex flex-col gap-8 pt-16 pl-72 mx-auto px-10 bg-[#040913] min-h-screen">
-      <div className="flex ">
+    <div className="flex flex-col gap-8 pt-24 md:pt-16 md:pl-72 mx-auto px-2 md:px-10 bg-[#040913] min-h-screen">
+      <div className="flex">
         <h1 className="text-3xl font-bold text-white w-full">Trip Details</h1>
         <button className="w-40 bg-green-700 text-white rounded-md hover:bg-green-600 transition">
           + New Trip
@@ -24,7 +24,6 @@ const TripDetails = () => {
                 CATEGORY
               </th>
               <th className="p-4 text-left border-b border-gray-700">AMOUNT</th>
-              <th className="p-4 text-left border-b border-gray-700">DATE</th>
               <th className="p-4 text-left border-b border-gray-700">STATUS</th>
             </tr>
           </thead>
@@ -37,9 +36,9 @@ const TripDetails = () => {
                 >
                   <td className="flex items-center gap-4 p-4 text-white">
                     <span className="p-2 text-lg bg-slate-700 opacity-80 rounded-full">
-                      <IoMdAirplane/>
+                      <IoMdAirplane />
                     </span>
-                    <div className="flex flex-col">
+                    <div className="flex flex-col w-[100px]">
                       <p className="text-xs text-gray-400 font-bold">
                         {item.date}
                       </p>
@@ -52,10 +51,13 @@ const TripDetails = () => {
                     {item.category}
                   </td>
                   <td className="p-4 font-semibold text-white">
-                    {item.budget}
+                    ₹{item.budget}
                   </td>
-                  <td className="p-4 font-semibold text-white">{item.date}</td>
-                  <td className="p-4 font-semibold text-white">pending</td>
+                  <td className="p-4 font-semibold text-white">
+                    <p className="bg-blue-700 w-fit py-1 px-2 rounded-2xl">
+                      Pending
+                    </p>
+                  </td>
                 </tr>
               ))
             ) : (

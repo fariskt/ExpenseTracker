@@ -92,14 +92,12 @@ const DayExpenseChart = () => {
   }, [expenses]);
 
   return (
-    <div className="bg-gray-800 rounded-md text-black">
+    <div className="bg-gray-800 rounded-md text-black md:w-[500px] md:h-[350px]">
       <h3 className="text-white py-2 pl-4">Day-to-Day Expenses</h3>
       <ReactApexChart
         options={dayToDayExpense.options}
         series={dayToDayExpense.series}
         type="bar"
-        height={250}
-        width={500}
       />
     </div>
   );

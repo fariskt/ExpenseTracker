@@ -5,11 +5,11 @@ const RecentExpenses = () => {
   const { expenses } = useContext(AppContext);
 
   return (
-    <div className="container border border-gray-700 rounded-lg w-[500px] bg-[#0f172a] max-h-[230px] overflow-y-auto scroll-bar">
-      <h1 className="text-base mb-4 border-b rounded-lg border-gray-700 p-2 absolute h-10 w-[500px] bg-[#0f172a]">
+    <div className="container border border-gray-700 rounded-lg w-[95%] md:w-[500px] bg-[#0f172a] max-h-[230px] overflow-y-auto scroll-bar">
+      <h1 className="text-base mb-4 border-b rounded-lg border-gray-700 p-2 h-10  md:w-[500px] bg-[#0f172a]">
         Recent Expenses
       </h1>
-      <table className="w-full table-auto mt-12">
+      <table className="w-full table-auto mt-5">
         <thead>
           <tr>
             <th className="px-4 text-left font-medium">Subject</th>

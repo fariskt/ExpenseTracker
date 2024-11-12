@@ -38,7 +38,7 @@ const ExpenseDetails = () => {
   };
 
   return (
-    <div className="flex flex-col gap-8 pt-16 pl-72 mx-auto px-10 bg-[#040913] min-h-screen">
+    <div className="flex flex-col gap-8 pt-24 md:pt-16 md:pl-72 mx-auto md:px-10 px-2 bg-[#040913] min-h-screen">
       <div className="flex ">
         <h1 className="text-3xl font-bold text-white w-full">Expenses</h1>
         <button className="w-40 bg-green-700 text-white rounded-md hover:bg-green-600 transition">

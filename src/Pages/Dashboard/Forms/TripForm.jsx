@@ -4,7 +4,6 @@ import AppContext from "../../../context/AppContext";
 const TripFormModal = ({ setShowForm }) => {
   const { setTripDetails } = useContext(AppContext);
   const [formData, setFormData] = useState({
-    title: "",
     destination: "",
     date: "",
     category: "",
@@ -22,7 +21,6 @@ const TripFormModal = ({ setShowForm }) => {
     e.preventDefault();
     setTripDetails((prev) => [...prev, formData]);
     setFormData({
-      title: "",
       destination: "",
       date: "",
       category: "",
@@ -32,7 +30,7 @@ const TripFormModal = ({ setShowForm }) => {
   };
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="w-full max-w-3xl p-6 bg-gray-800 rounded-lg shadow-lg relative">
+      <div className="md:w-full w-[90%] max-w-3xl p-4 md:p-6 bg-gray-800 rounded-lg shadow-lg relative">
         <button
           onClick={() => setShowForm("")}
           className="absolute top-3 right-3 text-gray-400 hover:text-white"
@@ -45,21 +43,6 @@ const TripFormModal = ({ setShowForm }) => {
         </h2>
 
         <form onSubmit={handleSumbit}>
-          <div className="mb-3">
-            <label htmlFor="title" className="block text-sm font-medium mb-2">
-              Trip Title
-            </label>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              id="title"
-              className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter trip title"
-            />
-          </div>
-
           <div className="mb-3">
             <label
               htmlFor="destination"

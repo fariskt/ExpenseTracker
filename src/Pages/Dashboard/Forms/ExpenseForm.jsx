@@ -42,7 +42,7 @@ const ExpenseFormModal = ({ setShowForm }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="w-full max-w-lg p-8 bg-gray-800 rounded-lg shadow-lg relative">
+      <div className="md:w-full w-[90%] max-w-lg p-4 md:p-8 bg-gray-800 rounded-lg shadow-lg relative">
         <button
           onClick={() => setShowForm("")}
           className="absolute top-4 right-4 text-gray-400 hover:text-white"
