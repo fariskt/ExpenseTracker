@@ -38,7 +38,7 @@ const SideBar = ({ setActivePage, activePage }) => {
           <CgProfile />
         </p>
       </div>
-      {showSideBar && (
+      {!showSideBar && (
         <div className="fixed top-10 md:top-0 rounded-lg flex flex-col justify-between bg-[#182134] md:bg-[#0f172a] border-gray-400 w-[350px] z-20 md:w-[250px] min-h-screen md:h-full left-0 p-4 ">
           <div className="flex flex-col gap-4 h-full pl-4">
             <div className="flex flex-col gap-4 items-center my-6">
