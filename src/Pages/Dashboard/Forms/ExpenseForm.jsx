@@ -1,9 +1,7 @@
 import React, { useContext, useState } from "react";
 import AppContext from "../../../context/AppContext";
 
-const ExpenseFormModal = ({
-  setShowForm,
-}) => {
+const ExpenseFormModal = ({ setShowForm }) => {
   const { setExpenses } = useContext(AppContext);
   const [formData, setFormData] = useState({
     id: Date.now(),
@@ -15,7 +13,6 @@ const ExpenseFormModal = ({
   });
   const handleChange = (e) => {
     const { value, name } = e.target;
-
     setFormData({
       ...formData,
       [name]: value,
@@ -64,6 +61,7 @@ const ExpenseFormModal = ({
               type="text"
               value={formData.subject}
               onChange={handleChange}
+              required
               name="subject"
               id="subject"
               className="w-full p-3 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -81,6 +79,7 @@ const ExpenseFormModal = ({
             <select
               id="category"
               value={formData.category}
+              required
               name="category"
               onChange={handleChange}
               className="w-full p-3 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -102,6 +101,7 @@ const ExpenseFormModal = ({
               type="number"
               id="amount"
               name="amount"
+              required
               value={formData.amount}
               onChange={handleChange}
               className="w-full p-3 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

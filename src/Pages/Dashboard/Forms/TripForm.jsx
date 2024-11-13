@@ -54,6 +54,7 @@ const TripFormModal = ({ setShowForm }) => {
               type="text"
               id="destination"
               name="destination"
+              required
               value={formData.destination}
               onChange={handleChange}
               className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -69,6 +70,7 @@ const TripFormModal = ({ setShowForm }) => {
               type="date"
               value={formData.date}
               onChange={handleChange}
+              required
               name="date"
               id="date"
               className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -85,6 +87,7 @@ const TripFormModal = ({ setShowForm }) => {
             <select
               id="category"
               name="category"
+              required
               value={formData.category}
               onChange={handleChange}
               className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -104,6 +107,7 @@ const TripFormModal = ({ setShowForm }) => {
             <input
               type="number"
               name="budget"
+              required
               onChange={handleChange}
               value={formData.budget}
               id="budget"
