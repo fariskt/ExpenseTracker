@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+enum BudgetPeriod {
+  MONTHLY
+  WEEKLY
+  CUSTOM
+}
+
+
+model User {
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  password   String?
+  googleId  String?  @unique
+  createdAt  DateTime @default(now())
+  avatar String?
+  updatedAt  DateTime @updatedAt
+  preferences  Preference?
+  transactions Transaction[]
+  budgets      Budget[]
+  goals        Goal[]
+}
+
+model Transaction {
+  id          String          @id @default(uuid())
+  userId      String
+  amount      Float
+  type        TransactionType
+  category    String
+  description String?
+  date        DateTime        @default(now())
+
+  user        User            @relation(fields: [userId], references: [id])
+}
+
+model Preference {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  currency          String   @default("USD")
+  monthlyReminder   Boolean  @default(true)
+  darkMode          Boolean  @default(false)
+  notifyOverBudget  Boolean  @default(true)
+  language          String   @default("en")
+
+  user              User     @relation(fields: [userId], references: [id])
+}
+
+
+model Budget {
+  id         String   @id @default(uuid())
+  userId     String
+  category   String
+  limit      Float
+  period     BudgetPeriod // enum: MONTHLY | WEEKLY | CUSTOM
+  startDate  DateTime
+  endDate    DateTime
+
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+
+model Goal {
+  id         String   @id @default(uuid())
+  userId     String
+  name       String
+  target     Float
+  saved      Float     @default(0)
+  deadline   DateTime?
+
+  user       User      @relation(fields: [userId], references: [id])
+}
