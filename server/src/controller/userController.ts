@@ -30,8 +30,12 @@ export const loginUser = async (req:Request, res:Response) => {
     if(!user){
       return res.status(404).json({message: "Invalid credentials"})
     }
+    if(!user.password){
+      return res.status(404).json({message: "NO password set for this user"})
 
-    const ismatch= await bcrypt.compare(password, user.password)
+    }
+
+    const ismatch= bcrypt.compare(password, user.password)
     if(!ismatch){
       return res.status(401).json({message: "Incorrect Password"})
     }
