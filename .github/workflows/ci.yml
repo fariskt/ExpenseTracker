@@ -26,7 +26,7 @@ jobs:
           --health-retries 5
 
     env:
-      DATABASE_URL: "postgres://postgres:goldfish@282004@localhost:5432/cashviodb"
+      DATABASE_URL: "postgres://postgres:goldfish%40282004@localhost:5432/cashviodb"
 
     steps:
       - uses: actions/checkout@v3
@@ -40,6 +40,13 @@ jobs:
         run: npm ci
         working-directory: ./server
 
+      - name: Wait for Postgres
+        run: |
+          while ! pg_isready -h localhost -p 5432 -U postgres; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+
       - name: Generate Prisma Client
         run: npx prisma generate
         working-directory: ./server
@@ -48,10 +55,6 @@ jobs:
         run: npx prisma migrate deploy
         working-directory: ./server
 
-      - name: Run Build (if using TypeScript)
+      - name: Run Build
         run: npm run build
         working-directory: ./server
-
-      # - name: Run Tests (if any)
-      #   run: npm test
-      #   working-directory: ./server
