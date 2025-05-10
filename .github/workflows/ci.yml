@@ -22,17 +22,17 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
-          cd frontend
+          cd client
           npm install
 
       - name: Build frontend
         run: |
-          cd frontend
+          cd client
           npm run build
 
       - name: Run frontend tests
         run: |
-          cd frontend
+          cd client
           npm test
 
       # Deploy frontend (optional, adjust as needed)
@@ -57,24 +57,24 @@ jobs:
 
       - name: Install backend dependencies
         run: |
-          cd backend
+          cd server
           npm install
 
       - name: Generate Prisma client
         run: |
-          cd backend
+          cd server
           npx prisma generate
 
       - name: Run migrations (Production-safe)
         run: |
-          cd backend
+          cd server
           npx prisma migrate deploy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Run backend tests
         run: |
-          cd backend
+          cd server
           npm test
 
       # Optional: Deploy to Render
