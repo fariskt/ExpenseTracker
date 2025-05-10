@@ -1,60 +1,102 @@
-name: CI - Build & Test
+# name: CI - Build & Test
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+# on:
+#   push:
+#     branches: [main]
+#   pull_request:
+#     branches: [main]
 
-jobs:
-  build:
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     services:
+#       postgres:
+#         image: postgres:14
+#         env:
+#           POSTGRES_USER: postgres
+#           POSTGRES_PASSWORD: postgres
+#           POSTGRES_DB: testdb
+#         ports:
+#           - 5432:5432
+#         options: >-
+#           --health-cmd pg_isready
+#           --health-interval 10s
+#           --health-timeout 5s
+#           --health-retries 5
+
+#     env:
+#       DATABASE_URL: "postgres://postgres:goldfish%40282004@localhost:5432/cashviodb"
+
+#     steps:
+#       - uses: actions/checkout@v3
+
+#       - name: Use Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '20'
+
+#       - name: Install Dependencies
+#         run: npm ci
+#         working-directory: ./server
+
+#       - name: Wait for Postgres
+#         run: |
+#           while ! pg_isready -h localhost -p 5432 -U postgres; do
+#             echo "Waiting for PostgreSQL..."
+#             sleep 2
+#           done
+
+#       - name: Generate Prisma Client
+#         run: npx prisma generate
+#         working-directory: ./server
+
+#       - name: Run Migrations
+#         run: npx prisma migrate deploy
+#         working-directory: ./server
+
+#       - name: Run Build
+#         run: npm run build
+#         working-directory: ./server
+
+
+  backend:
+    name: Build & Deploy Backend (Express + Prisma)
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:14
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: testdb
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    env:
-      DATABASE_URL: "postgres://postgres:goldfish%40282004@localhost:5432/cashviodb"
+    needs: frontend
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: 18
 
-      - name: Install Dependencies
-        run: npm ci
-        working-directory: ./server
-
-      - name: Wait for Postgres
+      - name: Install backend dependencies
         run: |
-          while ! pg_isready -h localhost -p 5432 -U postgres; do
-            echo "Waiting for PostgreSQL..."
-            sleep 2
-          done
+          cd backend
+          npm install
 
-      - name: Generate Prisma Client
-        run: npx prisma generate
-        working-directory: ./server
+      - name: Generate Prisma client
+        run: |
+          cd backend
+          npx prisma generate
 
-      - name: Run Migrations
-        run: npx prisma migrate deploy
-        working-directory: ./server
+      - name: Run migrations (Production-safe)
+        run: |
+          cd backend
+          npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Run Build
-        run: npm run build
-        working-directory: ./server
+      - name: Run backend tests
+        run: |
+          cd backend
+          npm test
+
+      # Optional: Deploy to Render
+      - name: Trigger Render Deploy Hook
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
