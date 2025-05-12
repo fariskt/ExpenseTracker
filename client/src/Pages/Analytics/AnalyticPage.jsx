@@ -74,14 +74,24 @@ const AnalyticPage = () => {
     });
     return monthlyTotals;
   };
+const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+useEffect(() => {
+  if (expenses && expenses.length > 0) {
     const monthlyTotal = getMonthlyTotal(expenses);
     setMonthlyExpenses((prev) => ({
       ...prev,
       series: [{ name: "Expenses", data: monthlyTotal }],
     }));
-  }, [expenses]);
+    setLoading(false);
+  }
+}, [expenses]);
+
+if (loading) {
+  return <div>Loading...</div>;
+}
+
+
 
   return (
     <div className="mt-24 md:mt-10 md:ml-72 mx-auto bg-gray-900 md:w-[80%] w-screen md:p-10 p-1">

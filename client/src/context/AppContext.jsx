@@ -18,6 +18,7 @@ export const AppProvider = ({ children }) => {
 
 
   useEffect(() => {
+    
     const storedName = localStorage.getItem("userName");
     if (!storedName) {
       const enteredName = prompt("Please enter your name:");
