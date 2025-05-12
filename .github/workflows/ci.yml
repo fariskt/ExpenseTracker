@@ -82,13 +82,3 @@ jobs:
       - name: Trigger Render Deploy Hook
         run: |
           curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
-
-
-name: CI/CD Pipeline
-
-on:
-  push:
-    branches:
-      - main  # Runs when you push to the main branch
-  workflow_dispatch:  # Manual trigger
-
