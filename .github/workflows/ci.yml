@@ -35,10 +35,11 @@ jobs:
           cd client
           npm test
 
-      # Deploy frontend (optional, adjust as needed)
-      - name: Trigger Frontend Deploy (e.g., Netlify)
+      # Trigger Frontend Deploy (use the deploy hook secret)
+      - name: Trigger Frontend Deploy (e.g., Vercel)
         run: |
           curl -X POST ${{ secrets.FRONTEND_DEPLOY_HOOK }}
+
 
   # Backend job
   backend:
@@ -81,3 +82,13 @@ jobs:
       - name: Trigger Render Deploy Hook
         run: |
           curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+
+
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Runs when you push to the main branch
+  workflow_dispatch:  # Manual trigger
+
