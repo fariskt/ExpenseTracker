@@ -1,15 +1,16 @@
-import React, { useContext, useState } from "react";
+import {useState } from "react";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { BsBag } from "react-icons/bs";
 import { GoGoal } from "react-icons/go";
 import { TbBrandGoogleAnalytics } from "react-icons/tb";
-import { IoSettingsOutline } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { IoMenu, IoCloseSharp } from "react-icons/io5";
-import AppContext from "../../context/AppContext";
+import { useAuthStore } from "../../store/useAuthStore";
 
 const MobileSideBar = ({ setActivePage, activePage }) => {
-  const { userName } = useContext(AppContext);
+  const { user } = useAuthStore();
+  console.log("=================",user);
+  
   const [showMobileSideBar, setShowMobileSideBar] = useState(false);
 
   return (
@@ -34,7 +35,7 @@ const MobileSideBar = ({ setActivePage, activePage }) => {
                 src="https://media.istockphoto.com/id/467555084/photo/silhouette-girl-portrait.jpg?s=612x612&w=0&k=20&c=oVEy3rsRiDsNNENKckxk6MselXjBsaR987BKLWjymdk="
                 alt=""
               />
-              <h5>{userName ? userName : "username"}</h5>
+              <h5>{user ? user.name : "username"}</h5>
             </div>
             <h4
               onClick={() => {
@@ -42,7 +43,7 @@ const MobileSideBar = ({ setActivePage, activePage }) => {
                 setShowMobileSideBar(!showMobileSideBar);
               }}
               className={` ${
-                activePage === "dashboard" && "bg-gray-700 text-blue-400"
+                activePage === "" && "bg-gray-700 text-blue-400"
               } flex items-center gap-2 text-base cursor-pointer hover:bg-gray-800 p-2 rounded-md duration-150`}
             >
               <span>

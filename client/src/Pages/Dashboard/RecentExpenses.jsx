@@ -1,9 +1,7 @@
-import React, { useContext } from "react";
-import AppContext from "../../context/AppContext";
+import { useExpenses } from "../../hooks/useExpenses";
 
 const RecentExpenses = () => {
-  const { expenses } = useContext(AppContext);
-
+  const { data: expenses } = useExpenses();
   return (
     <div className="container border border-gray-700 rounded-lg w-[95%] md:w-[95%] bg-[#0f172a] min-h-[200px] max-h-[230px] overflow-y-auto scroll-bar">
       <h1 className="text-base mb-4 border-b rounded-lg border-gray-700 p-2 h-10  md:w-full bg-[#0f172a]">
@@ -18,7 +16,7 @@ const RecentExpenses = () => {
             <th className="px-4 text-left font-normal">Amount</th>
           </tr>
         </thead>
-        {expenses.map((item, index) => (
+        {expenses?.length > 0 && expenses?.map((item, index) => (
           <tbody className="font-light" key={index}>
             <tr className="mt-44">
               <td className="py-1 px-3 md:px-4">{item.subject}</td>

@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import AppContext from "../../context/AppContext";
 import PieChart from "./PieChart";
+import { useExpenses } from "../../hooks/useExpenses";
 
 const AnalyticPage = () => {
-  const { expenses } = useContext(AppContext);
+  const { expenses } = useExpenses();
   const [monthlyExpense, setMonthlyExpenses] = useState({
     series: [],
     options: {
@@ -87,9 +87,6 @@ useEffect(() => {
   }
 }, [expenses]);
 
-if (loading) {
-  return <div>Loading...</div>;
-}
 
 
 

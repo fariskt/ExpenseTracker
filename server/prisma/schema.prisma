@@ -7,12 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum TransactionType {
-  INCOME
-  EXPENSE
-  TRANSFER
-}
-
 enum BudgetPeriod {
   MONTHLY
   WEEKLY
@@ -30,20 +24,19 @@ model User {
   avatar String?
   updatedAt  DateTime @updatedAt
   preferences  Preference?
-  transactions Transaction[]
+  expenses Expenses[]
   budgets      Budget[]
   goals        Goal[]
 }
 
-model Transaction {
+model Expenses {
   id          String          @id @default(uuid())
   userId      String
   amount      Float
-  type        TransactionType
   category    String
   description String?
   date        DateTime        @default(now())
-
+  subject     String
   user        User            @relation(fields: [userId], references: [id])
 }
 

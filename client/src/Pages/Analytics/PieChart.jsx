@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import AppContext from "../../context/AppContext";
+import { useExpenses } from "../../hooks/useExpenses";
 
 const PieChart = () => {
-  const { expenses } = useContext(AppContext);
+  const { expenses } = useExpenses();
 
   const predefinedCategories = ["fuel", "hospital", "food", "clothing", "other"];
 

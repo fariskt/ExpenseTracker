@@ -1,10 +1,12 @@
 import React, { useContext } from "react";
-import AppContext from "../../context/AppContext";
 import { IoMdAirplane } from "react-icons/io";
 import TripFormModal from "../Dashboard/Forms/TripForm";
+import useUIStore from "../../store/useUIForm";
+import useTripStore from "../../store/useTripStore";
 
 const TripDetails = () => {
-  const { tripDetails, showForm, setShowForm } = useContext(AppContext);
+  const {  showForm, setShowForm } = useUIStore();
+  const { tripDetails } = useTripStore();
   return (
     <div className="flex flex-col gap-8 pt-24 w-screen md:pt-16 md:pl-72 mx-auto px-2 md:px-10 bg-[#040913] min-h-screen">
       <div className="flex">

@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
-import AppContext from "../../../context/AppContext";
+import useTripStore from "../../../store/useTripStore";
 
 const TripFormModal = ({ setShowForm }) => {
-  const { setTripDetails } = useContext(AppContext);
+  const { setTripDetails } = useTripStore();
   const [formData, setFormData] = useState({
     destination: "",
     date: "",

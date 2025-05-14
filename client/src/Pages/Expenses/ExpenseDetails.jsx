@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import AppContext from "../../context/AppContext";
 import { GiClothes } from "react-icons/gi";
 import { IoFastFood } from "react-icons/io5";
 import { RiHospitalFill } from "react-icons/ri";
@@ -7,10 +6,13 @@ import { BsFillFuelPumpFill } from "react-icons/bs";
 import { TbEdit } from "react-icons/tb";
 import { MdDeleteOutline } from "react-icons/md";
 import ExpenseFormModal from "../Dashboard/Forms/ExpenseForm";
+import useUIStore from "../../store/useUIForm";
+import { useExpenses } from "../../hooks/useExpenses";
 
 const ExpenseDetails = () => {
-  const { expenses, setExpenses, showForm, setShowForm } =
-    useContext(AppContext);
+  const {  showForm, setShowForm } =useUIStore();
+  const {data:expenses, refetch} = useExpenses()
+  
 
   const getCategoryIcon = (category) => {
     switch (category.toLowerCase()) {
@@ -33,10 +35,9 @@ const ExpenseDetails = () => {
     return formattedDate;
   };
 
-  const deleteExpense = (id) => {
-    const filterdExpense = expenses.filter((item) => item.id !== id);
-    setExpenses(filterdExpense);
-    localStorage.setItem("expenses", JSON.stringify(filterdExpense));
+  const deleteExpense = async(id) => {
+    await AxiosInstance.delete("/expenses/delete",id)
+    refetch()
   };
 
   return (
@@ -70,7 +71,7 @@ const ExpenseDetails = () => {
             </tr>
           </thead>
           <tbody>
-            {expenses.length > 0 ? (
+            {expenses?.length > 0 ? (
               expenses.map((item, index) => (
                 <tr
                   key={index}

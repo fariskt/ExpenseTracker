@@ -5,17 +5,24 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { BiTrip } from "react-icons/bi";
 import ExpenseFormModal from "./Forms/ExpenseForm";
 import TripFormModal from "./Forms/TripForm";
-import AppContext from "../../context/AppContext";
+import useUIStore from "../../store/useUIForm";
 
 const QuickAccess = () => {
-  const { showForm, setShowForm } = useContext(AppContext);
+  const { showForm, setShowForm } = useUIStore();
   return (
     <>
       {showForm === "expenseform" && (
         <ExpenseFormModal setShowForm={setShowForm} />
       )}
       {showForm === "trip" && <TripFormModal setShowForm={setShowForm} />}
-      <div className="border border-gray-700 bg-[#0f172a] w-[95%] rounded-lg">
+      <div
+        className=" w-[95%]  rounded-xl shadow-2xl relative border border-blue-500/20"
+        style={{
+          background: "rgba(17, 24, 39, 0.6)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+        }}
+      >
         <h1 className="border-b border-gray-700 p-2 text-base">Quick Access</h1>
         <div className="flex flex-wrap gap-2 justify-around items-center h-full w-full py-8 px-2">
           <div
