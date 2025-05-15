@@ -40,19 +40,22 @@ export const loginUser = async (req: Request, res: Response) => {
   if (!ismatch) {
     return res.status(401).json({ message: "Incorrect Password" });
   }
-  const accessToken = generateToken({id: user.id})
+  const accessToken = generateToken({ id: user.id });
 
   res.cookie("token", accessToken, {
-    maxAge: 24 * 60* 60* 1000,
-    httpOnly:true,
-    secure: false
-  })
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none",
+  });
 
   return res.json(user);
 };
 
-
-export const getUserData = async (req: Request,res: Response): Promise<Response> => {
+export const getUserData = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   const { userId } = (req as AuthRequest).user;
   if (!userId) {
     return res.status(404).json({ message: "Userid not found" });
