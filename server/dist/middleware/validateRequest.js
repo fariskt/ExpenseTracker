@@ -1,4 +1,7 @@
-export const validateRequest = (schema) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateRequest = void 0;
+const validateRequest = (schema) => {
     return (req, res, next) => {
         try {
             req.body = schema.parse(req.body);
@@ -9,3 +12,4 @@ export const validateRequest = (schema) => {
         }
     };
 };
+exports.validateRequest = validateRequest;
