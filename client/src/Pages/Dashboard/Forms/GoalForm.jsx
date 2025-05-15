@@ -1,58 +1,50 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import AxiosInstance from "../../../Api/AxiosInstance";
-import { useExpenses } from "../../../hooks/useExpenses";
-import Loader from "../../../Components/ui/Loading";
-import PleaseWait from "../../../Components/ui/PleaseWait";
+import {  useGoals } from "../../../hooks/useExpenses";
+import { LuGoal } from "react-icons/lu";
 
-const ExpenseFormModal = ({ setShowForm }) => {
-  const { refetch } = useExpenses();
+const GoalFormModal = ({ setShowForm }) => {
+  const { refetch:refechGoals } = useGoals();
 
   const [formData, setFormData] = useState({
-    subject: "",
-    category: "",
-    amount: "",
-    description: "",
-    date: new Date().toISOString(),
+    name: "",
+    target: "",
+    saved: "",
+    deadline: new Date().toISOString().split("T")[0],
   });
 
   const handleChange = (e) => {
     const { value, name } = e.target;
     setFormData({
       ...formData,
-      [name]: name === "amount" ? Number(value) : value,
+      [name]: name === "target" || name === "saved" ? Number(value) : value,
     });
   };
 
-  const { mutate: postExpenseMutation, isPending } = useMutation({
-    mutationFn: async (expenseForm) => {
-      await AxiosInstance.post("/expenses/create", expenseForm);
+  const { mutate: postGoalFormMutation, isPending } = useMutation({
+    mutationFn: async (goalForm) => {
+      await AxiosInstance.post("/goals/create", goalForm);
     },
     onSuccess: () => {
-      toast.success("Expense Added Succesfully");
-      refetch();
+      refechGoals()
+      toast.success("Goal Created Succesfully");
       setShowForm(false);
     },
     onError: (err) => {
-      toast.success("Error adding expense");
+      toast.error("Error adding Goal");
     },
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const today = new Date();
-    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const day = dayNames[today.getDay()];
-    const expenseForm = { ...formData, day };
-
-    postExpenseMutation(expenseForm);
+    postGoalFormMutation(formData);
     setFormData({
-      subject: "",
-      category: "",
-      amount: "",
-      description: "",
-      date: new Date().toISOString(),
+      name: "",
+      target: 1,
+      saved: 1,
+      deadline: new Date().toISOString().split("T")[0],
     });
   };
 
@@ -72,10 +64,15 @@ const ExpenseFormModal = ({ setShowForm }) => {
         >
           ✖
         </button>
-
-        <h2 className="text-2xl font-bold mb-6 text-center text-white">
-          New Expense
-        </h2>
+        <div className="flex justify-center items-center gap-2 mb-2">
+          <h2 className="text-2xl font-bold text-center text-white">
+            Set Goal
+          </h2>
+          <span className="text-2xl text-green-500">
+            {" "}
+            <LuGoal />
+          </span>
+        </div>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -83,62 +80,37 @@ const ExpenseFormModal = ({ setShowForm }) => {
               htmlFor="subject"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Subject
+              Goal
             </label>
             <input
               type="text"
-              value={formData.subject}
+              value={formData.name}
               onChange={handleChange}
               required
-              name="subject"
-              id="subject"
+              name="name"
+              id="name"
               className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-              placeholder="Enter subject"
+              placeholder="Enter Goal"
             />
           </div>
 
           <div className="mb-4">
             <label
-              htmlFor="category"
+              htmlFor="target"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Category
-            </label>
-            <select
-              id="category"
-              value={formData.category}
-              required
-              name="category"
-              onChange={handleChange}
-              className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Select Type</option>
-              <option value="food">Food</option>
-              <option value="clothing">Clothing</option>
-              <option value="hospital">Hospital</option>
-              <option value="fuel">Fuel</option>
-              <option value="other">Others</option>
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label
-              htmlFor="amount"
-              className="block text-sm font-medium text-gray-300 mb-2"
-            >
-              Amount
+              Target
             </label>
             <input
               type="number"
-              id="amount"
-              name="amount"
+              id="target"
+              name="target"
               required
-              step={0.01}
               min={0}
-              value={formData.amount}
+              value={formData.target}
               onChange={handleChange}
               className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-              placeholder="Enter amount"
+              placeholder="Enter target"
             />
           </div>
 
@@ -147,17 +119,34 @@ const ExpenseFormModal = ({ setShowForm }) => {
               htmlFor="description"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Description
+              Saved
             </label>
-            <textarea
-              id="description"
-              value={formData.description}
-              name="description"
+            <input
+              id="saved"
+              type="number"
+              value={formData.saved}
+              name="saved"
               onChange={handleChange}
-              rows="4"
               className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-              placeholder="Enter description"
-            ></textarea>
+              placeholder="Enter saved amount"
+            />
+          </div>
+          <div className="mb-6">
+            <label
+              htmlFor="deadline"
+              className="block text-sm font-medium text-gray-300 mb-2"
+            >
+              Set Deadline
+            </label>
+            <input
+              id="deadline"
+              type="date"
+              value={formData.deadline}
+              name="deadline"
+              onChange={handleChange}
+              className="w-full p-3 bg-gray-700 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+              placeholder="Enter deadline"
+            />
           </div>
 
           <div className="flex justify-end gap-4">
@@ -185,4 +174,4 @@ const ExpenseFormModal = ({ setShowForm }) => {
   );
 };
 
-export default ExpenseFormModal;
+export default GoalFormModal;

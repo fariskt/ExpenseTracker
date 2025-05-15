@@ -1,48 +1,36 @@
-import React, { useContext, useState } from "react";
-import { IoWalletOutline } from "react-icons/io5";
-import { CiReceipt } from "react-icons/ci";
-import { TbReportAnalytics } from "react-icons/tb";
+import { IoBagHandleOutline, IoWalletOutline } from "react-icons/io5";
 import { BiTrip } from "react-icons/bi";
 import ExpenseFormModal from "./Forms/ExpenseForm";
 import TripFormModal from "./Forms/TripForm";
 import useUIStore from "../../store/useUIForm";
+import { LuGoal } from "react-icons/lu";
+import GoalFormModal from "./Forms/GoalForm";
+import BudgetFormModal from "./Forms/BudgetForm";
+import QuickAccessCard from "../../Components/ui/QuickAcessCard";
 
 const QuickAccess = () => {
   const { showForm, setShowForm } = useUIStore();
+  const quickAccess = [
+    {type: "expenses", icon: <IoWalletOutline/> , text: "New Expense"},
+    {type: "budget", icon: <IoBagHandleOutline/> , text: "Set Budget"},
+    {type: "goal", icon: <LuGoal/> , text: "New Goal"},
+    {type: "trip", icon: <BiTrip/> , text: "Add Trip Plan"},
+  ]
+
   return (
     <>
-      {showForm === "expenseform" && (
+      {showForm === "expenses" && (
         <ExpenseFormModal setShowForm={setShowForm} />
       )}
       {showForm === "trip" && <TripFormModal setShowForm={setShowForm} />}
-      <div
-        className=" w-[95%]  rounded-xl shadow-2xl relative border border-blue-500/20"
-        style={{
-          background: "rgba(17, 24, 39, 0.6)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-        }}
-      >
+      {showForm === "goal" && <GoalFormModal setShowForm={setShowForm} />}
+      {showForm === "budget" && <BudgetFormModal setShowForm={setShowForm} />}
+      <div className="container border border-gray-700 rounded-lg w-[95%] md:w-[95%] bg-[#0f172a] min-h-[200px] max-h-[230px] overflow-y-auto scroll-bar">
         <h1 className="border-b border-gray-700 p-2 text-base">Quick Access</h1>
         <div className="flex flex-wrap gap-2 justify-around items-center h-full w-full py-8 px-2">
-          <div
-            className="flex items-center gap-4 bg-gray-800 hover:bg-gray-700 p-2 md:p-4 rounded-md cursor-pointer"
-            onClick={() => setShowForm("expenseform")}
-          >
-            <span className="rounded-full bg-red-500 p-2 md:p-3">
-              <IoWalletOutline />
-            </span>
-            <h3 className="font-bold text-sm">+ New Expense</h3>
-          </div>
-          <div
-            className="flex items-center gap-4 bg-gray-800 hover:bg-gray-700 p-2 md:p-4 rounded-md cursor-pointer"
-            onClick={() => setShowForm("trip")}
-          >
-            <span className="rounded-full bg-blue-500 p-2 md:p-3">
-              <BiTrip />
-            </span>
-            <h3 className="font-bold text-sm">+ Create trip</h3>
-          </div>
+          {quickAccess.map((item,index)=> (
+            <QuickAccessCard quickAccess={item} key={index}/>
+          ))}
         </div>
       </div>
     </>

@@ -1,41 +1,42 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import AxiosInstance from "../../../Api/AxiosInstance";
 import { useExpenses } from "../../../hooks/useExpenses";
-import Loader from "../../../Components/ui/Loading";
-import PleaseWait from "../../../Components/ui/PleaseWait";
+import { IoBagHandleOutline } from "react-icons/io5";
 
-const ExpenseFormModal = ({ setShowForm }) => {
+const BudgetFormModal = ({ setShowForm }) => {
   const { refetch } = useExpenses();
 
+  const today = new Date().toISOString().split("T")[0]; // "2025-05-14"
+
   const [formData, setFormData] = useState({
-    subject: "",
     category: "",
-    amount: "",
-    description: "",
-    date: new Date().toISOString(),
+    limit: "",
+    period: "",
+    startDate: today,
+    endDate: today,
   });
 
   const handleChange = (e) => {
     const { value, name } = e.target;
     setFormData({
       ...formData,
-      [name]: name === "amount" ? Number(value) : value,
+      [name]: name === "limit" ? Number(value) : value,
     });
   };
 
-  const { mutate: postExpenseMutation, isPending } = useMutation({
-    mutationFn: async (expenseForm) => {
-      await AxiosInstance.post("/expenses/create", expenseForm);
+  const { mutate: postBudgetMuation, isPending } = useMutation({
+    mutationFn: async (budgetForm) => {
+      await AxiosInstance.post("/budget/create", budgetForm);
     },
     onSuccess: () => {
-      toast.success("Expense Added Succesfully");
+      toast.success("Budget Added Succesfully");
       refetch();
       setShowForm(false);
     },
     onError: (err) => {
-      toast.success("Error adding expense");
+      toast.success("Error adding budget");
     },
   });
 
@@ -44,15 +45,15 @@ const ExpenseFormModal = ({ setShowForm }) => {
     const today = new Date();
     const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const day = dayNames[today.getDay()];
-    const expenseForm = { ...formData, day };
+    const budgetForm = { ...formData, day };
 
-    postExpenseMutation(expenseForm);
+    postBudgetMuation(budgetForm);
     setFormData({
-      subject: "",
       category: "",
-      amount: "",
-      description: "",
-      date: new Date().toISOString(),
+      limit: "",
+      period: "",
+      startDate: today,
+      endDate: today,
     });
   };
 
@@ -72,31 +73,16 @@ const ExpenseFormModal = ({ setShowForm }) => {
         >
           ✖
         </button>
-
-        <h2 className="text-2xl font-bold mb-6 text-center text-white">
-          New Expense
-        </h2>
+        <div className="flex justify-center items-center gap-2 mb-2">
+          <h2 className="text-2xl font-bold text-center text-white">
+            Set Budget
+          </h2>
+          <span className="text-2xl text-orange-500">
+            <IoBagHandleOutline />
+          </span>{" "}
+        </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              htmlFor="subject"
-              className="block text-sm font-medium text-gray-300 mb-2"
-            >
-              Subject
-            </label>
-            <input
-              type="text"
-              value={formData.subject}
-              onChange={handleChange}
-              required
-              name="subject"
-              id="subject"
-              className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-              placeholder="Enter subject"
-            />
-          </div>
-
           <div className="mb-4">
             <label
               htmlFor="category"
@@ -104,60 +90,93 @@ const ExpenseFormModal = ({ setShowForm }) => {
             >
               Category
             </label>
-            <select
-              id="category"
+            <input
+              type="text"
               value={formData.category}
+              onChange={handleChange}
               required
               name="category"
-              onChange={handleChange}
-              className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Select Type</option>
-              <option value="food">Food</option>
-              <option value="clothing">Clothing</option>
-              <option value="hospital">Hospital</option>
-              <option value="fuel">Fuel</option>
-              <option value="other">Others</option>
-            </select>
+              id="category"
+              className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+              placeholder="Enter category"
+            />
           </div>
 
           <div className="mb-4">
             <label
-              htmlFor="amount"
+              htmlFor="limit"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Amount
+              Limit
             </label>
             <input
               type="number"
-              id="amount"
-              name="amount"
+              id="limit"
+              name="limit"
               required
               step={0.01}
               min={0}
-              value={formData.amount}
+              value={formData.limit}
               onChange={handleChange}
               className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-              placeholder="Enter amount"
+              placeholder="Enter limit"
             />
           </div>
 
-          <div className="mb-6">
+          <div className="mb-4">
             <label
-              htmlFor="description"
+              htmlFor="period"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Description
+              Period
             </label>
-            <textarea
-              id="description"
-              value={formData.description}
-              name="description"
+            <select
+              id="period"
+              value={formData.period}
+              required
+              name="period"
               onChange={handleChange}
-              rows="4"
-              className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-              placeholder="Enter description"
-            ></textarea>
+              className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select Period</option>
+              <option value="MONTHLY">MONTHLY</option>
+              <option value="WEEKLY">WEEKLY</option>
+              <option value="CUSTOM">CUSTOM</option>
+            </select>
+          </div>
+          <div className="mb-6">
+            <label
+              htmlFor="startDate"
+              className="block text-sm font-medium text-gray-300 mb-2"
+            >
+              Set StartDate
+            </label>
+            <input
+              id="startDate"
+              type="date"
+              value={formData.startDate}
+              name="startDate"
+              onChange={handleChange}
+              className="w-full p-3 bg-gray-700 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+              placeholder="Enter startDate"
+            />
+          </div>
+          <div className="mb-6">
+            <label
+              htmlFor="endDate"
+              className="block text-sm font-medium text-gray-300 mb-2"
+            >
+              Set EndDate
+            </label>
+            <input
+              id="endDate"
+              type="date"
+              value={formData.endDate}
+              name="endDate"
+              onChange={handleChange}
+              className="w-full p-3 bg-gray-700 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+              placeholder="Enter endDate"
+            />
           </div>
 
           <div className="flex justify-end gap-4">
@@ -185,4 +204,4 @@ const ExpenseFormModal = ({ setShowForm }) => {
   );
 };
 
-export default ExpenseFormModal;
+export default BudgetFormModal;

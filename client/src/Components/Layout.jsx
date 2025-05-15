@@ -17,13 +17,13 @@ const Layout = () => {
     queryKey: ["fetchUser"],
     queryFn: async () => {
       const res = await Axioinstance.get("/users/me");
-      return res.data;
+      return res.data.user;
     },
   });
 
   useEffect(() => {
-    if (data?.user && !user) {
-      setUser(data.user);
+    if (data && !user) {
+      setUser(data);
     }
   }, [data, user, setUser]);
 
@@ -35,14 +35,16 @@ const Layout = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    if (!user && !isLoading) {
-      const timeout = setTimeout(() => {
-        navigate("/login");
-      }, 2000);
-      return () => clearTimeout(timeout); 
-    }
-  }, [user, isLoading, navigate]);
+
+useEffect(() => {
+  if (!isLoading && (!data || !data.id)) {
+    navigate("/login");
+  }
+}, [data, isLoading, navigate]);
+
+
+
+  
 
   if (isLoading) {
     return (

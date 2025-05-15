@@ -2,6 +2,8 @@ import React from "react";
 import ExpenseChart from "../Pages/Dashboard/Charts/ExpenseChart";
 import RecentExpenses from "../Pages/Dashboard/RecentExpenses";
 import QuickAccess from "../Pages/Dashboard/QuickAccess";
+import GoalChart from "../Pages/Dashboard/Charts/GoalChart";
+import GoalsPreview from "../Pages/Dashboard/GoalsPreview";
 
 const DashBoard = () => {
   return (
@@ -11,6 +13,7 @@ const DashBoard = () => {
         <RecentExpenses />
       </div>
       <ExpenseChart />
+      <GoalsPreview/>
     </div>
   );
 };

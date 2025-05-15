@@ -29,8 +29,15 @@ const TripFormModal = ({ setShowForm }) => {
     });
   };
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="md:w-full w-[90%] max-w-3xl p-4 md:p-6 bg-gray-800 rounded-lg shadow-lg relative">
+    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
+      <div
+        className="md:w-full w-[90%] max-w-lg p-4 md:p-8 rounded-xl shadow-2xl relative border border-blue-500/20"
+        style={{
+          background: "rgba(17, 24, 39, 0.6)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+        }}
+        >
         <button
           onClick={() => setShowForm("")}
           className="absolute top-3 right-3 text-gray-400 hover:text-white"
@@ -57,7 +64,7 @@ const TripFormModal = ({ setShowForm }) => {
               required
               value={formData.destination}
               onChange={handleChange}
-              className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
               placeholder="Enter destination"
             />
           </div>
@@ -73,7 +80,7 @@ const TripFormModal = ({ setShowForm }) => {
               required
               name="date"
               id="date"
-              className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 bg-gray-600 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
             />
           </div>
 
@@ -90,7 +97,7 @@ const TripFormModal = ({ setShowForm }) => {
               required
               value={formData.category}
               onChange={handleChange}
-              className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
             >
               <option value="">Select Category</option>
               <option value="business">Business</option>
@@ -111,7 +118,7 @@ const TripFormModal = ({ setShowForm }) => {
               onChange={handleChange}
               value={formData.budget}
               id="budget"
-              className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
               placeholder="Enter budget"
             />
           </div>
@@ -129,7 +136,7 @@ const TripFormModal = ({ setShowForm }) => {
               value={formData.description}
               onChange={handleChange}
               name="description"
-              className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
               placeholder="Enter trip description"
             ></textarea>
           </div>

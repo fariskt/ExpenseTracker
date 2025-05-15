@@ -58,8 +58,11 @@ export default function Login() {
   const {mutate:loginUser} = useMutation({
     mutationFn: login,
     onSuccess: ()=> {
-      toast.success("Login success!")
       navigate("/")
+      toast.success("Login success!")
+    },
+    onError:(err)=> {
+      toast.error(err.response.data.message ||"Login failed")
     }
   })
   
@@ -150,14 +153,14 @@ export default function Login() {
       </div>
       <div className="absolute top-10 right-5 flex gap-2">
         {themes.map((t, i) => (
-          <buttonm
+          <button
             key={i}
             className={`w-6 h-6 rounded-full ${t.background} ${
               t.id === theme.id ? "border" : ""
             }`}
             onClick={() => setTheme(t)}
             title={`Theme ${i + 1}`}
-          />
+          ></button>
         ))}
       </div>
     </div>

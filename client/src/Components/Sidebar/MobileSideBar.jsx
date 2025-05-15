@@ -1,5 +1,5 @@
 import {useState } from "react";
-import { LuLayoutDashboard } from "react-icons/lu";
+import { LuGoal, LuLayoutDashboard } from "react-icons/lu";
 import { BsBag } from "react-icons/bs";
 import { GoGoal } from "react-icons/go";
 import { TbBrandGoogleAnalytics } from "react-icons/tb";
@@ -78,6 +78,20 @@ const MobileSideBar = ({ setActivePage, activePage }) => {
                 <GoGoal />
               </span>
               Trips
+            </h4>
+            <h4
+              onClick={() => {
+                setShowMobileSideBar(!showMobileSideBar);
+                setActivePage("goals");
+              }}
+              className={`${
+                activePage === "goals" && "bg-gray-700 text-blue-400"
+              } flex items-center gap-2 text-base cursor-pointer hover:bg-gray-800 p-2 rounded-md duration-150`}
+            >
+              <span>
+                <LuGoal />
+              </span>
+              Goals
             </h4>
             <h4
               onClick={() => {
