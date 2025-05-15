@@ -24,12 +24,12 @@ model User {
   avatar String?
   updatedAt  DateTime @updatedAt
   preferences  Preference?
-  expenses Expenses[]
+  expenses Expense[]
   budgets      Budget[]
   goals        Goal[]
 }
 
-model Expenses {
+model Expense {
   id          String          @id @default(uuid())
   userId      String
   amount      Float

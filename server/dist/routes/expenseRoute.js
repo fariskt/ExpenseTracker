@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const asyncHandler_1 = require("../middleware/asyncHandler");
+const verifyToken_1 = require("../middleware/verifyToken");
+const expenseController_1 = require("../controller/expenseController");
+const expenseRoute = (0, express_1.Router)();
+expenseRoute.get("/", verifyToken_1.isAuthenticate, (0, asyncHandler_1.asyncHandler)(expenseController_1.getUserExpenses));
+expenseRoute.post("/create", verifyToken_1.isAuthenticate, (0, asyncHandler_1.asyncHandler)(expenseController_1.createExpenses));
+exports.default = expenseRoute;

@@ -7,7 +7,7 @@ export const getUserExpenses = async (req: Request, res: Response) => {
   if (!userId) {
     return res.status(401).json({ message: "Not authenticated" });
   }
-  const expenses = await prisma.expenses.findMany({ where: { userId } });
+  const expenses = await prisma.expense.findMany({ where: { userId } });
   if (!expenses) {
     return res.status(404).json({ message: "Expense not found" });
   }
@@ -24,7 +24,7 @@ export const createExpenses = async (req: Request, res: Response) => {
     return res.status(404).json({ message: "Please fill the field" });
   }
 
-  const newExpense= await prisma.expenses.create({data: {
+  const newExpense= await prisma.expense.create({data: {
     userId,
     amount: Number(expenses.amount) || 0,
     category: expenses.category,
