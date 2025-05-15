@@ -1,10 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const asyncHandler_1 = require("../middleware/asyncHandler");
-const verifyToken_1 = require("../middleware/verifyToken");
-const goalController_1 = require("../controller/goalController");
-const goalRoute = (0, express_1.Router)();
-goalRoute.get("/", verifyToken_1.isAuthenticate, (0, asyncHandler_1.asyncHandler)(goalController_1.getUserGoals));
-goalRoute.post("/create", verifyToken_1.isAuthenticate, (0, asyncHandler_1.asyncHandler)(goalController_1.createGoals));
-exports.default = goalRoute;
+import { Router } from "express";
+import { asyncHandler } from "../middleware/asyncHandler";
+import { isAuthenticate } from "../middleware/verifyToken";
+import { createGoals, getUserGoals } from "../controller/goalController";
+const goalRoute = Router();
+goalRoute.get("/", isAuthenticate, asyncHandler(getUserGoals));
+goalRoute.post("/create", isAuthenticate, asyncHandler(createGoals));
+export default goalRoute;

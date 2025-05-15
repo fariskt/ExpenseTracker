@@ -55,7 +55,7 @@ export default function Login() {
 
   const navigate= useNavigate()
 
-  const {mutate:loginUser} = useMutation({
+  const {mutate:loginUser,isPending} = useMutation({
     mutationFn: login,
     onSuccess: ()=> {
       navigate("/")
@@ -123,9 +123,10 @@ export default function Login() {
 
             <button
               type="submit"
-              className={`w-full py-3 rounded-md font-bold tracking-wide ${theme.primary} ${theme.color} hover:scale-105 transition-transform`}
+              disabled={isPending}
+              className={`w-full py-3 rounded-md font-bold tracking-wide ${isPending && "bg-gray-700" }  ${theme.primary} ${theme.color} hover:scale-105 transition-transform`}
             >
-              SUBMIT
+              {isPending ? "SUBMITTING..." : "SUBMIT"}
             </button>
             <div className="flex items-center justify-around">
               <div className="w-24 h-[1px] bg-gray-500 "></div>

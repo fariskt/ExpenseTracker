@@ -1,10 +1,4 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateToken = generateToken;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-function generateToken(user) {
-    return jsonwebtoken_1.default.sign(user, process.env.JWT_SECRET, { expiresIn: "7d" });
+import jwt from "jsonwebtoken";
+export function generateToken(user) {
+    return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "7d" });
 }
