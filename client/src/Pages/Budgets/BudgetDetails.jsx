@@ -98,16 +98,16 @@ const BudgetDetails = () => {
                 budgets.map((item, index) => (
                   <tr
                     key={index}
-                    className="hover:bg-gray-800 transition-colors border-b  border-gray-700"
+                    className=" transition-colors border-b  border-gray-700"
                   >
                     <td className="p-4 font-semibold text-gray-300 capitalize">
                       {item.category}
                     </td>
-                    <td className="p-4 font-semibold text-gray-300 capitalize">
+                    <td className="p-4 font-semibold text-white capitalize">
                       ₹{item.limit}
                     </td>
                     <td className="p-4 font-semibold text-white">
-                      ₹{item.period}
+                      {item.period}
                     </td>
                     <td className="p-4 font-semibold text-white">
                       {BudgetDate(item.startDate)}

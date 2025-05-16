@@ -5,7 +5,7 @@ import BudgetPreview from "../Pages/Dashboard/BudgetPreview";
 
 const DashBoard = () => {
   return (
-    <div className="flex flex-col gap-8 pt-20 pl-4 md:pl-80 mx-auto bg-[#040913] w-screen">
+    <div className="flex flex-col gap-8 pt-20 pl-4 md:pl-32 mx-auto bg-[#040913] ">
       <QuickAccess />
       <div className="md:w-full">
         <RecentExpenses />

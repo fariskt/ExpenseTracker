@@ -61,7 +61,7 @@ useEffect(() => {
         <SideBar  />
       )}
 
-      <div className="flex-1 bg-[#040913] pb-10">
+      <div className=" flex-1 bg-[#040913] md:pb-10 pb-20">
         <Outlet />
       </div>
     </div>

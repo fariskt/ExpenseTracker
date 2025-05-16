@@ -2,9 +2,9 @@ import React, { useContext, useState } from "react";
 import { GiClothes } from "react-icons/gi";
 import { IoFastFood } from "react-icons/io5";
 import { RiHospitalFill } from "react-icons/ri";
-import { BsFillFuelPumpFill } from "react-icons/bs";
+import { BsFillFuelPumpFill, BsFillPatchQuestionFill } from "react-icons/bs";
 import { TbEdit } from "react-icons/tb";
-import { MdDeleteOutline } from "react-icons/md";
+import { MdDeleteOutline, MdOutlineOtherHouses } from "react-icons/md";
 import ExpenseFormModal from "../Dashboard/Forms/ExpenseForm";
 import useUIStore from "../../store/useUIForm";
 import { useExpenses } from "../../hooks/useExpenses";
@@ -28,7 +28,7 @@ const ExpenseDetails = () => {
       case "clothing":
         return <GiClothes className="text-green-400" />;
       default:
-        return null;
+        return <BsFillPatchQuestionFill  className="text-orange-600"/>;
     }
   };
 

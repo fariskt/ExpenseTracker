@@ -56,14 +56,6 @@ const StyledWrapper = styled.div`
     box-shadow: 0 0 30px 5px rgba(55, 0, 255, 0.3);
     transform: scale(1.02);
   }
-  @media (max-width: 640px) {
-    .card {
-      max-width: 110px;
-    }
-    .card2 {
-      padding:10px; /* Remove padding on small screens */
-    }
-  }
 `;
 
 export default QuickAccessCard;
