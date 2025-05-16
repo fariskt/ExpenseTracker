@@ -9,6 +9,10 @@ const fetchGoals = async () => {
   const response = await AxiosInstance.get('/goals');  
   return response.data?.goals || [];
 };
+const fetchBudgets = async () => {
+  const response = await AxiosInstance.get('/budgets');  
+  return response.data?.budgets || [];
+};
 
 export const useExpenses = () => {
   return useQuery({
@@ -22,4 +26,9 @@ export const useGoals = () => {
     queryFn: fetchGoals
   });  
 };
-
+export const useBudgets = () => {
+  return useQuery({
+    queryKey: ['fetchBudgets'],
+    queryFn: fetchBudgets
+  });  
+};

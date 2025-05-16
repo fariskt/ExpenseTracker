@@ -8,7 +8,6 @@ import Loader from "./ui/Loading";
 import { Outlet, useNavigate } from "react-router-dom";
 
 const Layout = () => {
-  const [activePage, setActivePage] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
 
@@ -57,9 +56,9 @@ useEffect(() => {
   return (
     <div className="flex min-h-screen">
       {isMobile ? (
-        <MobileSideBar setActivePage={setActivePage} activePage={activePage} />
+        <MobileSideBar  />
       ) : (
-        <SideBar setActivePage={setActivePage} activePage={activePage} />
+        <SideBar  />
       )}
 
       <div className="flex-1 bg-[#040913] pb-10">

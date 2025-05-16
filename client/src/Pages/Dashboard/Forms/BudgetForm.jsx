@@ -1,21 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import AxiosInstance from "../../../Api/AxiosInstance";
 import { useExpenses } from "../../../hooks/useExpenses";
 import { IoBagHandleOutline } from "react-icons/io5";
 
-const BudgetFormModal = ({ setShowForm }) => {
+const BudgetFormModal = ({ setShowForm, BudgetToEdit, setBudgetToEdit }) => {
   const { refetch } = useExpenses();
-
-  const today = new Date().toISOString().split("T")[0]; // "2025-05-14"
-
   const [formData, setFormData] = useState({
     category: "",
     limit: "",
     period: "",
-    startDate: today,
-    endDate: today,
+    startDate: new Date().toISOString(),
+    endDate: new Date().toISOString(),
   });
 
   const handleChange = (e) => {
@@ -28,34 +25,79 @@ const BudgetFormModal = ({ setShowForm }) => {
 
   const { mutate: postBudgetMuation, isPending } = useMutation({
     mutationFn: async (budgetForm) => {
-      await AxiosInstance.post("/budget/create", budgetForm);
+      const payload = {
+        ...budgetForm,
+        startDate: new Date(formData.startDate).toISOString(),
+        endDate: new Date(formData.endDate).toISOString(),
+      };
+      await AxiosInstance.post("/budgets/create", payload);
     },
     onSuccess: () => {
       toast.success("Budget Added Succesfully");
       refetch();
+      setFormData({
+        category: "",
+        limit: "",
+        period: "",
+        startDate: new Date().toISOString(),
+        endDate: new Date().toISOString(),
+      });
+      setBudgetToEdit(null);
       setShowForm(false);
     },
     onError: (err) => {
-      toast.success("Error adding budget");
+      toast.error("Error adding budget");
+    },
+  });
+  const { mutate: edutBudgetMuation, isPending: editLoading } = useMutation({
+    mutationFn: async (budgetForm) => {
+      const payload = {
+        ...budgetForm,
+        startDate: new Date(formData.startDate).toISOString(),
+        endDate: new Date(formData.endDate).toISOString(),
+      };
+      await AxiosInstance.put(`/budgets/update/${BudgetToEdit.id}`, payload);
+    },
+    onSuccess: () => {
+      toast.success("Budget updated Succesfully");
+      refetch();
+      setFormData({
+        category: "",
+        limit: "",
+        period: "",
+        startDate: new Date().toISOString(),
+        endDate: new Date().toISOString(),
+      });
+      setBudgetToEdit(null);
+      setShowForm(false);
+    },
+    onError: (err) => {
+      toast.error("Error updating budget");
     },
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const today = new Date();
-    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const day = dayNames[today.getDay()];
-    const budgetForm = { ...formData, day };
-
-    postBudgetMuation(budgetForm);
-    setFormData({
-      category: "",
-      limit: "",
-      period: "",
-      startDate: today,
-      endDate: today,
-    });
+    if (BudgetToEdit) {
+      edutBudgetMuation(formData);
+    } else {
+      postBudgetMuation(formData);
+    }
   };
+const formatDate = (date) => new Date(date).toISOString().split("T")[0];
+
+  useEffect(() => {
+  if (BudgetToEdit) {
+    setFormData({
+      category: BudgetToEdit.category || "",
+      limit: BudgetToEdit.limit || "",
+      period: BudgetToEdit.period || "",
+      startDate: BudgetToEdit.startDate ? formatDate(BudgetToEdit.startDate) : formatDate(new Date()),
+      endDate: BudgetToEdit.endDate ? formatDate(BudgetToEdit.endDate) : formatDate(new Date()),
+    });
+  }
+}, [BudgetToEdit]);
+
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
@@ -75,7 +117,7 @@ const BudgetFormModal = ({ setShowForm }) => {
         </button>
         <div className="flex justify-center items-center gap-2 mb-2">
           <h2 className="text-2xl font-bold text-center text-white">
-            Set Budget
+           {BudgetToEdit ? "Edit Budget" : "Set Budget"}
           </h2>
           <span className="text-2xl text-orange-500">
             <IoBagHandleOutline />
@@ -195,7 +237,7 @@ const BudgetFormModal = ({ setShowForm }) => {
                   : "bg-blue-600 text-white hover:bg-blue-500"
               }`}
             >
-              {isPending ? "Submitting..." : "Submit"}
+              {isPending ? "Submitting..." : editLoading ? "Editing..." :  "Submit"}
             </button>
           </div>
         </form>

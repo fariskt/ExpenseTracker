@@ -34,3 +34,43 @@ export const createGoals = async (req: Request, res: Response) => {
     .status(201)
     .json({ message: "Goal created succesfully", data: newGoal });
 };
+
+export const deleteGoal = async (req: Request, res: Response) => {
+  const { goalId } = req.params;
+  if (!goalId) {
+    return res.status(404).json({ message: "Goal not found" });
+  }
+  await prisma.goal.delete({ where: { id: goalId } });
+  return res.status(201).json({ message: "Goal deleted successfully" });
+};
+
+export const updateGoal = async (req: Request, res: Response) => {
+  const { goalId } = req.params;
+  if (!goalId) {
+    return res.status(404).json({ message: "Goal not found" });
+  }
+  const { name, target, saved, deadline } = req.body;
+
+  const existingGoal = await prisma.goal.findUnique({
+    where: { id: goalId },
+  });
+
+  if (!existingGoal) {
+    return res.status(404).json({ message: "Goal not found" });
+  }
+
+  const updatedGoal = await prisma.goal.update({
+    where: { id: goalId },
+    data: {
+      name,
+      target,
+      saved,
+      deadline,
+    },
+  });
+
+  return res.status(200).json({
+    message: "Goal updated successfully",
+    expense: updatedGoal,
+  });
+};

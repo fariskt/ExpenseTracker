@@ -8,11 +8,14 @@ import { MdDeleteOutline } from "react-icons/md";
 import ExpenseFormModal from "../Dashboard/Forms/ExpenseForm";
 import useUIStore from "../../store/useUIForm";
 import { useExpenses } from "../../hooks/useExpenses";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import AxiosInstance from "../../Api/AxiosInstance";
 
 const ExpenseDetails = () => {
-  const {  showForm, setShowForm } =useUIStore();
-  const {data:expenses, refetch} = useExpenses()
-  
+  const { showForm, setShowForm } = useUIStore();
+  const { data: expenses, refetch } = useExpenses();
+  const [expenseToEdit, setExpenseToEdit] = useState(null)
 
   const getCategoryIcon = (category) => {
     switch (category.toLowerCase()) {
@@ -35,26 +38,48 @@ const ExpenseDetails = () => {
     return formattedDate;
   };
 
-  const deleteExpense = async(id) => {
-    await AxiosInstance.delete("/expenses/delete",id)
-    refetch()
+  const { mutate: deleleteExpenseMutaion, isPending } = useMutation({
+    mutationFn: async (id) => {
+      await AxiosInstance.delete(`/expenses/delete/${id}`,);
+    },
+    onSuccess: () => {
+      refetch();
+      toast.success("Expense deleted Successfully");
+    },
+    onError: () => {
+      toast.error("Error deleting Expense");
+    },
+  });
+
+  const deleteExpense = (expenseID) => {
+    deleleteExpenseMutaion(expenseID);
   };
 
+  const editExpense = (expense)=> {
+    setShowForm("expenseForm")
+    setExpenseToEdit(expense)
+  }
+
   return (
-    <div className="flex flex-col w-screen gap-8 pt-24 md:pt-16 md:pl-72 mx-auto md:px-10 px-2 bg-[#040913] min-h-screen">
+    <div className="flex flex-col gap-8 pt-24 md:pt-16 md:pl-72 mx-auto md:px-10 px-2 bg-[#040913] max-w-[100vw] min-h-screen">
       <div className="flex justify-between">
         <h1 className="text-2xl md:text-3xl font-bold text-white w-full">
           Expenses
         </h1>
         <button
-          onClick={() => setShowForm("expenseForm")}
+          onClick={() => {
+            if(expenseToEdit){
+              setExpenseToEdit(null)
+            }
+            setShowForm("expenseForm")
+          }}
           className="w-40 bg-green-700 text-sm font-bold md:text-base text-white rounded-md hover:bg-green-600 transition"
         >
           + New Expense
         </button>
       </div>
       {showForm === "expenseForm" && (
-        <ExpenseFormModal setShowForm={setShowForm} />
+        <ExpenseFormModal setShowForm={setShowForm} expenseToEdit={expenseToEdit} setExpenseToEdit={setExpenseToEdit}/>
       )}
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left text-gray-400 bg-gray-900 border-separate border-spacing-0">
@@ -92,15 +117,17 @@ const ExpenseDetails = () => {
                     {item.category}
                   </td>
                   <td className="p-4 font-semibold text-white">
-                    ${item.amount}
+                    ₹{item.amount}
                   </td>
                   <td className="flex items-center gap-4 text-blue-400 cursor-pointer hover:underline">
-                    <span className="text-lg px-3 py-1 bg-blue-800 hover:bg-blue-600 opacity-90 rounded-md text-white">
+                    <span 
+                      onClick={() => editExpense(item)}
+                    className="text-lg px-3 py-1 bg-blue-800 hover:bg-blue-600 opacity-90 rounded-md text-white">
                       <TbEdit />
                     </span>
                     <span
                       onClick={() => deleteExpense(item.id)}
-                      className="text-lg px-3 py-1 bg-red-800 hover:bg-red-600 opacity-90 rounded-md text-white"
+                      className={`text-lg px-3 py-1 ${isPending ? "bg-red-800 animate-pulse" : "bg-red-600"} hover:bg-red-500 opacity-90 rounded-md text-white`}
                     >
                       <MdDeleteOutline />
                     </span>

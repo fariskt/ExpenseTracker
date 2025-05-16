@@ -1,15 +1,16 @@
 import {useState } from "react";
 import { LuGoal, LuLayoutDashboard } from "react-icons/lu";
 import { BsBag } from "react-icons/bs";
-import { GoGoal } from "react-icons/go";
 import { TbBrandGoogleAnalytics } from "react-icons/tb";
 import { CgProfile } from "react-icons/cg";
-import { IoMenu, IoCloseSharp } from "react-icons/io5";
+import { IoMenu, IoCloseSharp, IoBagHandleOutline } from "react-icons/io5";
 import { useAuthStore } from "../../store/useAuthStore";
+import { Link, useLocation, useParams } from "react-router-dom";
 
-const MobileSideBar = ({ setActivePage, activePage }) => {
+const MobileSideBar = () => {
   const { user } = useAuthStore();
-  console.log("=================",user);
+  
+  const {pathname} = useLocation()
   
   const [showMobileSideBar, setShowMobileSideBar] = useState(false);
 
@@ -37,76 +38,76 @@ const MobileSideBar = ({ setActivePage, activePage }) => {
               />
               <h5>{user ? user.name : "username"}</h5>
             </div>
-            <h4
+            <Link
+            to="/"
               onClick={() => {
-                setActivePage("dashboard");
                 setShowMobileSideBar(!showMobileSideBar);
               }}
               className={` ${
-                activePage === "" && "bg-gray-700 text-blue-400"
+                pathname === "/" && "bg-gray-700 text-blue-400"
               } flex items-center gap-2 text-base cursor-pointer hover:bg-gray-800 p-2 rounded-md duration-150`}
             >
               <span>
                 <LuLayoutDashboard />
               </span>
               Dashboard
-            </h4>
-            <h4
+            </Link>
+            <Link
+            to="/expenses"
               onClick={() => {
-                setActivePage("expenses");
                 setShowMobileSideBar(!showMobileSideBar);
               }}
               className={` ${
-                activePage === "expenses" && "bg-gray-700 text-blue-400"
+                pathname === "/expenses" && "bg-gray-700 text-blue-400"
               } flex items-center gap-2 text-base cursor-pointer hover:bg-gray-800 p-2 rounded-md duration-150`}
             >
               <span>
                 <BsBag />
               </span>
               Expenses
-            </h4>
-            <h4
+            </Link>
+            <Link
+            to="/goals"
               onClick={() => {
                 setShowMobileSideBar(!showMobileSideBar);
-                setActivePage("trip");
               }}
               className={`${
-                activePage === "trip" && "bg-gray-700 text-blue-400"
-              } flex items-center gap-2 text-base cursor-pointer hover:bg-gray-800 p-2 rounded-md duration-150`}
-            >
-              <span>
-                <GoGoal />
-              </span>
-              Trips
-            </h4>
-            <h4
-              onClick={() => {
-                setShowMobileSideBar(!showMobileSideBar);
-                setActivePage("goals");
-              }}
-              className={`${
-                activePage === "goals" && "bg-gray-700 text-blue-400"
+                pathname === "/goals" && "bg-gray-700 text-blue-400"
               } flex items-center gap-2 text-base cursor-pointer hover:bg-gray-800 p-2 rounded-md duration-150`}
             >
               <span>
                 <LuGoal />
               </span>
               Goals
-            </h4>
-            <h4
+            </Link>
+            <Link
+            to="/budget"
               onClick={() => {
                 setShowMobileSideBar(!showMobileSideBar);
-                setActivePage("analytic");
               }}
               className={`${
-                activePage === "analytic" && "bg-gray-700 text-blue-400"
+                pathname === "/budget" && "bg-gray-700 text-blue-400"
+              } flex items-center gap-2 text-base cursor-pointer hover:bg-gray-800 p-2 rounded-md duration-150`}
+            >
+              <span>
+                <IoBagHandleOutline />
+              </span>
+              Budget
+            </Link>
+            <Link
+            to="/analytics"
+              onClick={() => {
+                setShowMobileSideBar(!showMobileSideBar);
+              }}
+              className={`${
+                pathname === "/analytic" && "bg-gray-700 text-blue-400"
               } flex items-center gap-2 text-base cursor-pointer hover:bg-gray-800 p-2 rounded-md duration-150`}
             >
               <span>
                 <TbBrandGoogleAnalytics />
               </span>
               Analytics
-            </h4>
+            </Link>
           </div>
         </div>
       )}

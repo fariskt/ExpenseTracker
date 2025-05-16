@@ -80,7 +80,7 @@ const GoalChart = ({ goals }) => {
       <div>
         <div className="chart-wrap ">
           <div id="chart">
-            <h4 className="relative top-[130px] left-[110px]  ">Goals</h4>
+            <h4 className="hidden md:block relative top-[130px] left-[110px]">Goals</h4>
             <ReactApexChart
               options={state.options}
               series={state.series}

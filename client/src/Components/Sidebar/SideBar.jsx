@@ -5,8 +5,9 @@ import { BsBag } from "react-icons/bs";
 import { GoGoal } from "react-icons/go";
 import { TbBrandGoogleAnalytics } from "react-icons/tb";
 import { useAuthStore } from "../../store/useAuthStore";
+import { IoBagHandleOutline } from "react-icons/io5";
 
-const SideBar = ({ setActivePage, activePage }) => {
+const SideBar = ()=> {
   const { user } = useAuthStore();
 
   return (
@@ -27,7 +28,6 @@ const SideBar = ({ setActivePage, activePage }) => {
               isActive ? "bg-gray-700 text-blue-400" : ""
             }`
           }
-          onClick={() => setActivePage("")}
         >
           <LuLayoutDashboard /> <span>Dashboard</span>
         </NavLink>
@@ -38,7 +38,6 @@ const SideBar = ({ setActivePage, activePage }) => {
               isActive ? "bg-gray-700 text-blue-400" : ""
             }`
           }
-          onClick={() => setActivePage("expenses")}
         >
           <BsBag /> <span>Expenses</span>
         </NavLink>
@@ -49,20 +48,18 @@ const SideBar = ({ setActivePage, activePage }) => {
               isActive ? "bg-gray-700 text-blue-400" : ""
             }`
           }
-          onClick={() => setActivePage("goals")}
         >
           <LuGoal /> <span>Goals</span>
         </NavLink>
         <NavLink
-          to="/trips"
+          to="/budget"
           className={({ isActive }) =>
             `cursor-pointer flex items-center gap-2 p-2 rounded-md hover:bg-gray-800 ${
               isActive ? "bg-gray-700 text-blue-400" : ""
             }`
           }
-          onClick={() => setActivePage("trips")}
         >
-          <GoGoal /> <span>Trips</span>
+          <IoBagHandleOutline /> <span>Budget</span>
         </NavLink>
         <NavLink
           to="/analytics"
@@ -71,7 +68,6 @@ const SideBar = ({ setActivePage, activePage }) => {
               isActive ? "bg-gray-700 text-blue-400" : ""
             }`
           }
-          onClick={() => setActivePage("analytics")}
         >
           <TbBrandGoogleAnalytics /> <span>Analytics</span>
         </NavLink>

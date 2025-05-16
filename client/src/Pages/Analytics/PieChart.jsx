@@ -3,7 +3,7 @@ import ReactApexChart from "react-apexcharts";
 import { useExpenses } from "../../hooks/useExpenses";
 
 const PieChart = () => {
-  const { expenses } = useExpenses();
+  const { data:expenses } = useExpenses();
 
   const predefinedCategories = ["fuel", "hospital", "food", "clothing", "other"];
 
@@ -52,7 +52,7 @@ const PieChart = () => {
     }, {});
     
 
-    expenses.forEach((item) => {
+    expenses?.forEach((item) => {
       if (item.category && categoryTotals.hasOwnProperty(item.category)) {
         const amount = parseFloat(item.amount);
         if (!isNaN(amount)) {
@@ -82,6 +82,10 @@ const PieChart = () => {
   useEffect(() => {
     getChartData();
   }, [expenses]);
+
+  if(!expenses || expenses.length === 0){
+    return
+  }
 
   return (
     <div className="mt-10 bg-slate-800 p-4 rounded-lg items-center md:items-start md:flex-row flex flex-col">

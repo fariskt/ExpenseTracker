@@ -4,6 +4,7 @@ import expenseRoute from "./routes/expenseRoute";
 import goalRoute from "./routes/goalRoute";
 import cors from "cors"
 import cookieParser from 'cookie-parser'
+import budgetRoute from './routes/budgetRoute';
 const app = express();
 
 app.use(cors({
@@ -17,5 +18,6 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/expenses', expenseRoute);
 app.use('/api/goals', goalRoute);
+app.use('/api/budgets', budgetRoute);
 
 export default app;

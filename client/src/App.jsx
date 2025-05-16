@@ -6,8 +6,9 @@ import Signup from "./Pages/Auth/Signup";
 import { Toaster } from "react-hot-toast";
 import DashBoard from "./Components/DashBoard";
 import ExpenseDetails from "./Pages/Expenses/ExpenseDetails";
-import TripDetails from "./Pages/Trips/TripDetails";
 import AnalyticPage from "./Pages/Analytics/AnalyticPage";
+import GoalDetails from "./Pages/Goals/GoalDetails";
+import BudgetDetails from "./Pages/Budgets/BudgetDetails";
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
           <Route element={<Layout />}>
           <Route path="/" element={<DashBoard/>}/>
           <Route path="/expenses" element={<ExpenseDetails/>}/>
-          <Route path="/trips" element={<TripDetails/>}/>
+          <Route path="/goals" element={<GoalDetails/>}/>
+          <Route path="/budget" element={<BudgetDetails/>}/>
           <Route path="/analytics" element={<AnalyticPage/>}/>
           
           </Route>

@@ -1,12 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import AxiosInstance from "../../../Api/AxiosInstance";
 import { useExpenses } from "../../../hooks/useExpenses";
-import Loader from "../../../Components/ui/Loading";
-import PleaseWait from "../../../Components/ui/PleaseWait";
 
-const ExpenseFormModal = ({ setShowForm }) => {
+const ExpenseFormModal = ({ setShowForm, expenseToEdit, setExpenseToEdit }) => {
   const { refetch } = useExpenses();
 
   const [formData, setFormData] = useState({
@@ -35,9 +33,35 @@ const ExpenseFormModal = ({ setShowForm }) => {
       setShowForm(false);
     },
     onError: (err) => {
-      toast.success("Error adding expense");
+      toast.error("Error adding expense");
     },
   });
+  const { mutate: editExpenseMutation, isPending: editExpenseisPending } =
+    useMutation({
+      mutationFn: async (expenseForm) => {
+        await AxiosInstance.put(
+          `/expenses/update/${expenseToEdit.id}`,
+          expenseForm
+        );
+      },
+      onSuccess: () => {
+        toast.success("Expense updated Succesfully");
+        refetch();
+        setShowForm(false);
+        setExpenseToEdit(null);
+        setFormData({
+          subject: "",
+          category: "",
+          amount: "",
+          description: "",
+          date: new Date().toISOString(),
+        });
+      },
+      onError: (err) => {
+        toast.error("Error updating expense");
+        setExpenseToEdit(null);
+      },
+    });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,16 +69,24 @@ const ExpenseFormModal = ({ setShowForm }) => {
     const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const day = dayNames[today.getDay()];
     const expenseForm = { ...formData, day };
-
-    postExpenseMutation(expenseForm);
-    setFormData({
-      subject: "",
-      category: "",
-      amount: "",
-      description: "",
-      date: new Date().toISOString(),
-    });
+    if (expenseToEdit) {
+      editExpenseMutation(expenseForm);
+    } else {
+      postExpenseMutation(expenseForm);
+    }
   };
+
+  useEffect(() => {
+    if (expenseToEdit) {
+      setFormData({
+        subject: expenseToEdit.subject || "",
+        category: expenseToEdit.category || "",
+        amount: expenseToEdit.amount || "",
+        description: expenseToEdit.description || "",
+        date: expenseToEdit.date || new Date().toISOString(),
+      });
+    }
+  }, [expenseToEdit]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
@@ -67,14 +99,17 @@ const ExpenseFormModal = ({ setShowForm }) => {
         }}
       >
         <button
-          onClick={() => setShowForm("")}
+          onClick={() => {
+            setShowForm("");
+            setExpenseToEdit(null);
+          }}
           className="absolute top-4 right-4 text-gray-300 hover:text-white text-xl"
         >
           ✖
         </button>
 
         <h2 className="text-2xl font-bold mb-6 text-center text-white">
-          New Expense
+          {expenseToEdit ? "Edit Expense" : "New Expense"}
         </h2>
 
         <form onSubmit={handleSubmit}>
@@ -133,8 +168,6 @@ const ExpenseFormModal = ({ setShowForm }) => {
               id="amount"
               name="amount"
               required
-              step={0.01}
-              min={0}
               value={formData.amount}
               onChange={handleChange}
               className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
@@ -176,7 +209,11 @@ const ExpenseFormModal = ({ setShowForm }) => {
                   : "bg-blue-600 text-white hover:bg-blue-500"
               }`}
             >
-              {isPending ? "Submitting..." : "Submit"}
+              {isPending
+                ? "Submitting..."
+                : editExpenseisPending
+                ? "Editing..."
+                : "Submit"}
             </button>
           </div>
         </form>

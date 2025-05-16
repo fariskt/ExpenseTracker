@@ -42,12 +42,13 @@ export const loginUser = async (req: Request, res: Response) => {
   }
   const accessToken = generateToken({ id: user.id });
 
-  res.cookie("token", accessToken, {
-    maxAge: 24 * 60 * 60 * 1000,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
-  });
+ res.cookie("token", accessToken, {
+  maxAge: 24 * 60 * 60 * 1000, // 1 day
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production", // only true in production
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // 'lax' is safer for dev
+});
+
 
   return res.json(user);
 };

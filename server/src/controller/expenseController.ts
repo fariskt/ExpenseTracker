@@ -19,19 +19,64 @@ export const getUserExpenses = async (req: Request, res: Response) => {
 export const createExpenses = async (req: Request, res: Response) => {
   const expenses = req.body;
 
-  const {userId} = (req as AuthRequest).user
+  const { userId } = (req as AuthRequest).user;
   if (!expenses) {
     return res.status(404).json({ message: "Please fill the field" });
   }
 
-  const newExpense= await prisma.expense.create({data: {
-    userId,
-    amount: Number(expenses.amount) || 0,
-    category: expenses.category,
-    description: expenses.description,
-    date: new Date(),
-    subject:expenses.subject
-  }})
+  const newExpense = await prisma.expense.create({
+    data: {
+      userId,
+      amount: Number(expenses.amount) || 0,
+      category: expenses.category,
+      description: expenses.description,
+      date: new Date(),
+      subject: expenses.subject,
+    },
+  });
 
-  return res.status(201).json({message: "Expense created succesfully", data: newExpense})
+  return res
+    .status(201)
+    .json({ message: "Expense created succesfully", data: newExpense });
+};
+
+export const deleteExpense = async (req: Request, res: Response) => {
+  const { expenseId } = req.params;
+  if (!expenseId) {
+    return res.status(404).json({ message: "Expense not found" });
+  }
+  await prisma.expense.delete({ where: { id: expenseId } });
+  return res.status(201).json({ message: "Expense deleted successfully" });
+};
+
+export const updateExpense = async (req: Request, res: Response) => {
+  const { expenseId } = req.params;
+  if (!expenseId) {
+    return res.status(404).json({ message: "Expense not found" });
+  }
+  const { amount, category, description, date, subject } = req.body;
+
+  const existingExpense = await prisma.expense.findUnique({
+    where: { id: expenseId },
+  });
+
+  if (!existingExpense) {
+    return res.status(404).json({ message: "Expense not found" });
+  }
+
+  const updatedExpense = await prisma.expense.update({
+    where: { id: expenseId },
+    data: {
+      amount,
+      category,
+      description,
+      date,
+      subject,
+    },
+  });
+
+  return res.status(200).json({
+    message: "Expense updated successfully",
+    expense: updatedExpense,
+  });
 };

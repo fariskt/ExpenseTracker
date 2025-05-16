@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import AxiosInstance from "../../../Api/AxiosInstance";
-import {  useGoals } from "../../../hooks/useExpenses";
+import { useGoals } from "../../../hooks/useExpenses";
 import { LuGoal } from "react-icons/lu";
 
-const GoalFormModal = ({ setShowForm }) => {
-  const { refetch:refechGoals } = useGoals();
+const GoalFormModal = ({ setShowForm, goalToEdit, setGoalToEdit }) => {
+  const { refetch: refechGoals } = useGoals();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -23,30 +23,61 @@ const GoalFormModal = ({ setShowForm }) => {
     });
   };
 
-  const { mutate: postGoalFormMutation, isPending } = useMutation({
+  const { mutate: postGoalMutation, isPending } = useMutation({
     mutationFn: async (goalForm) => {
       await AxiosInstance.post("/goals/create", goalForm);
     },
     onSuccess: () => {
-      refechGoals()
-      toast.success("Goal Created Succesfully");
-      setShowForm(false);
+      toast.success("Goal Added Succesfully");
+      refechGoals();
+      setShowForm("");
     },
     onError: (err) => {
-      toast.error("Error adding Goal");
+      toast.error("Error adding goal");
     },
   });
+  const { mutate: editGoalMutation, isPending: editGoalisPending } =
+    useMutation({
+      mutationFn: async (goalForm) => {
+        await AxiosInstance.put(`/goal/update/${goalToEdit.id}`, goalForm);
+      },
+      onSuccess: () => {
+        toast.success("Goal updated Succesfully");
+        refechGoals();
+        setShowForm("");
+        setGoalToEdit(null);
+        setFormData({
+          name: "",
+          target: "",
+          saved: "",
+          deadline: new Date().toISOString().split("T")[0],
+        });
+      },
+      onError: (err) => {
+        toast.error("Error updating goal");
+        setGoalToEdit(null);
+      },
+    });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    postGoalFormMutation(formData);
-    setFormData({
-      name: "",
-      target: 1,
-      saved: 1,
-      deadline: new Date().toISOString().split("T")[0],
-    });
+    if (goalToEdit) {
+      editGoalMutation(formData);
+    } else {
+      postGoalMutation(formData);
+    }
   };
+
+  useEffect(() => {
+    if (goalToEdit) {
+      setFormData({
+        name: goalToEdit.name || "",
+        target: goalToEdit.target || "",
+        saved: goalToEdit.saved || "",
+        deadline: goalToEdit.deadline || new Date().toISOString().split("T")[0],
+      });
+    }
+  }, [goalToEdit]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
@@ -66,7 +97,7 @@ const GoalFormModal = ({ setShowForm }) => {
         </button>
         <div className="flex justify-center items-center gap-2 mb-2">
           <h2 className="text-2xl font-bold text-center text-white">
-            Set Goal
+            {goalToEdit ? "Edit Goal" : "Set Goal"}
           </h2>
           <span className="text-2xl text-green-500">
             {" "}
@@ -165,7 +196,7 @@ const GoalFormModal = ({ setShowForm }) => {
                   : "bg-blue-600 text-white hover:bg-blue-500"
               }`}
             >
-              {isPending ? "Submitting..." : "Submit"}
+              {isPending ? "Submitting..." : editGoalisPending ? "Please wait..." : "Submit"}
             </button>
           </div>
         </form>
