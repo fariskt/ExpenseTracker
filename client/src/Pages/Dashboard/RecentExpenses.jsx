@@ -10,7 +10,7 @@ const RecentExpenses = () => {
 
   return (
     <>
-      <div className="container border border-gray-700 rounded-lg w-[95%] md:w-[95%] bg-[#0f172a] min-h-[210px] max-h-[230px] overflow-y-auto scroll-bar">
+      <div className="container border border-gray-400 rounded-lg w-[95%] md:w-[95%] min-h-[210px] max-h-[230px] overflow-y-auto scroll-bar">
         <div className="flex justify-between">
           <h1 className="my-3 pl-4 ">Recent Expenses</h1>
           <button
@@ -27,7 +27,7 @@ const RecentExpenses = () => {
         ) : expenses?.length > 0 ? (
           <table className="w-full table-auto">
             <thead className="sticky top-0">
-              <tr className="bg-gray-800 text-left text-gray-300 text-sm uppercase tracking-wider">
+              <tr className=" text-left  text-sm uppercase tracking-wider bg-gray-100">
                 <th className="px-4 py-4 text-left font-medium">Subject</th>
                 <th className="px-4 py-4 text-left font-normal">Type</th>
                 <th className="px-4 py-4 text-left font-normal">Date</th>
@@ -40,20 +40,20 @@ const RecentExpenses = () => {
                 <tbody className="font-light " key={index}>
                   <tr
                     key={index}
-                    className="border-b border-gray-700 hover:bg-gray-900 transition-colors"
+                    className="border-b border-gray-200 transition-colors"
                     >
-                    <td className="p-4 text-gray-200 font-medium capitalize">
+                    <td className="p-4  capitalize">
                       {item.subject}
                     </td>
-                    <td className="p-4 text-gray-100 font-semibold">
+                    <td className="p-4 ">
                       {item.category}
                     </td>
-                    <td className="p-4 text-gray-300 uppercase">
+                    <td className="p-4 uppercase">
                       {" "}
                       {item.date &&
                         new Date(item.date).toLocaleDateString("en-GB")}
                     </td>
-                    <td className="p-4 text-gray-400">₹{item.amount}</td>
+                    <td className="p-4 font-medium">₹{item.amount}</td>
                   </tr>
                 </tbody>
               ))}

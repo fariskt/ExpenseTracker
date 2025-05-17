@@ -10,15 +10,15 @@ const GoalsPreview = () => {
   const { data: goals, isLoading } = useGoals();
   const { setShowForm } = useUIStore();
 
-  if (goals && goals.length === 0) {
+  if (!goals) {
     return;
   }
 
   return (
-    <div className=" border border-gray-700 rounded-lg w-[95%] md:w-[95%] bg-[#0f172a] min-h-[200px] max-h-[420px] overflow-y-auto scroll-bar">
-      <div className="flex justify-between items-center border-b border-gray-700">
+    <div className=" border border-gray-400 rounded-lg w-[95%] md:w-[95%] min-h-[200px] max-h-[420px] overflow-y-auto scroll-bar">
+      <div className="flex justify-between items-center border-b border-gray-400">
         <h1 className="my-3 pl-4 ">
-          Goals <span className="text-gray-300">({goals?.length})</span>
+          Goals <span className="text-gray-500">({goals?.length})</span>
         </h1>
         <button
           className="text-blue-500 text-2xl mr-4 "
@@ -28,7 +28,7 @@ const GoalsPreview = () => {
         </button>
       </div>
       <div className="flex flex-col-reverse md:flex-row items-center w-full gap-6 mt-4">
-        <div className="md:ml-8 bg-gray-800 rounded-2xl p-3">
+        <div className="md:ml-8 border border-gray-200 rounded-2xl p-3">
           <GoalChart goals={goals} />
         </div>
         <div className="w-full max-h-[300px] overflow-y-auto scroll-bar mt-2">
@@ -58,7 +58,7 @@ const GoalsPreview = () => {
                   key={goal.id}
                 >
                   <div className="flex items-center  justify-between gap-4">
-                    <span className="rounded-full bg-green-500 p-3 text-xl">
+                    <span className="rounded-full bg-green-300 p-3 text-xl">
                       <LuGoal />
                     </span>
                     <div className="flex flex-col">
@@ -111,7 +111,7 @@ const GoalsPreview = () => {
                         {((goal.saved / goal.target) * 100).toFixed(0)}%
                       </span>
                     </div>
-                    <div className="h-2 bg-gray-600 w-full rounded-xl">
+                    <div className="h-2 bg-gray-300 w-full rounded-xl">
                       <div
                         style={{
                           width: `${(goal.saved / goal.target) * 100}%`,

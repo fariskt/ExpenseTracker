@@ -16,11 +16,11 @@ const QuickAccessCard = ({ quickAccess }) => {
           <span
             className={`rounded-full ${
               type === "expenses"
-                ? "bg-blue-600"
+                ? "bg-blue-400"
                 : type === "goal"
-                ? "bg-green-500"
+                ? "bg-green-400"
                 : type === "budget"
-                ? "bg-red-500"
+                ? "bg-red-400"
                 : "bg-orange-400"
             } p-2 md:p-3`}
           >
@@ -32,11 +32,12 @@ const QuickAccessCard = ({ quickAccess }) => {
     </StyledWrapper>
   );
 };
+
 const StyledWrapper = styled.div`
   .card {
     width: 100%;
     height: 80px;
-    background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
+    border: 1px solid gray;
     border-radius: 20px;
     transition: all 0.3s;
   }
@@ -44,18 +45,18 @@ const StyledWrapper = styled.div`
   .card2 {
     width: 100%;
     height: 100%;
-    background-color: #1a1a1a;
+    background-color: #f9f9f9;
     padding: 0 30px;
-
     border-radius: 20px;
-    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease-in-out;
     transform: scale(0.98);
   }
 
   .card:hover {
-    box-shadow: 0 0 30px 5px rgba(55, 0, 255, 0.3);
     transform: scale(1.02);
   }
 `;
+
 
 export default QuickAccessCard;

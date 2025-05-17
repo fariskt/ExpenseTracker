@@ -1,10 +1,8 @@
 import { useState } from "react";
 import ReactApexChart from "react-apexcharts";
+import { useGoals } from "../../../hooks/useExpenses";
 
-const GoalChart = ({ goals }) => {
-  if (!goals) {
-    return;
-  }
+const GoalChart = ({goals}) => {  
   const { onTrack, offTrack, closed, atRisk } = goals.reduce(
     (acc, goal) => {
       const { saved, target, deadline } = goal;
@@ -74,6 +72,11 @@ const GoalChart = ({ goals }) => {
       },
     },
   });
+
+  
+    if (!goals) {
+    return;
+  }
 
   return (
     <div>

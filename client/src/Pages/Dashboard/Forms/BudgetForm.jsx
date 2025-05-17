@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import AxiosInstance from "../../../Api/AxiosInstance";
-import { useExpenses } from "../../../hooks/useExpenses";
+import { useBudgets, useExpenses } from "../../../hooks/useExpenses";
 import { IoBagHandleOutline } from "react-icons/io5";
+import { motion } from "framer-motion";
 
 const BudgetFormModal = ({ setShowForm, BudgetToEdit, setBudgetToEdit }) => {
-  const { refetch } = useExpenses();
+  const { refetch } = useBudgets();
   const [formData, setFormData] = useState({
     category: "",
     limit: "",
@@ -46,10 +47,12 @@ const BudgetFormModal = ({ setShowForm, BudgetToEdit, setBudgetToEdit }) => {
       setShowForm(false);
     },
     onError: (err) => {
-      toast.error("Error adding budget");
+      console.log(err);
+      
+      toast.error(err.response.data.message || "Error adding budget");
     },
   });
-  const { mutate: edutBudgetMuation, isPending: editLoading } = useMutation({
+  const { mutate: editBudgetMuation, isPending: editLoading } = useMutation({
     mutationFn: async (budgetForm) => {
       const payload = {
         ...budgetForm,
@@ -59,8 +62,8 @@ const BudgetFormModal = ({ setShowForm, BudgetToEdit, setBudgetToEdit }) => {
       await AxiosInstance.put(`/budgets/update/${BudgetToEdit.id}`, payload);
     },
     onSuccess: () => {
-      toast.success("Budget updated Succesfully");
       refetch();
+      toast.success("Budget updated Succesfully");
       setFormData({
         category: "",
         limit: "",
@@ -79,29 +82,40 @@ const BudgetFormModal = ({ setShowForm, BudgetToEdit, setBudgetToEdit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (BudgetToEdit) {
-      edutBudgetMuation(formData);
+      editBudgetMuation(formData);
     } else {
       postBudgetMuation(formData);
     }
   };
-const formatDate = (date) => new Date(date).toISOString().split("T")[0];
+  const formatDate = (date) => new Date(date).toISOString().split("T")[0];
 
   useEffect(() => {
-  if (BudgetToEdit) {
-    setFormData({
-      category: BudgetToEdit.category || "",
-      limit: BudgetToEdit.limit || "",
-      period: BudgetToEdit.period || "",
-      startDate: BudgetToEdit.startDate ? formatDate(BudgetToEdit.startDate) : formatDate(new Date()),
-      endDate: BudgetToEdit.endDate ? formatDate(BudgetToEdit.endDate) : formatDate(new Date()),
-    });
-  }
-}, [BudgetToEdit]);
-
+    if (BudgetToEdit) {
+      setFormData({
+        category: BudgetToEdit.category || "",
+        limit: BudgetToEdit.limit || "",
+        period: BudgetToEdit.period || "",
+        startDate: BudgetToEdit.startDate
+          ? formatDate(BudgetToEdit.startDate)
+          : formatDate(new Date()),
+        endDate: BudgetToEdit.endDate
+          ? formatDate(BudgetToEdit.endDate)
+          : formatDate(new Date()),
+      });
+    }
+  }, [BudgetToEdit]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
-      <div
+      <motion.div
+        initial={{ x: 500, rotate: -15, opacity: 0 }}
+        animate={{ x: 0, rotate: 0, opacity: 1 }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 20,
+          duration: 0.8,
+        }}
         className="md:w-full w-[90%] max-w-lg p-4 md:p-8 rounded-xl shadow-2xl relative border border-blue-500/20"
         style={{
           background: "rgba(17, 24, 39, 0.6)",
@@ -117,7 +131,7 @@ const formatDate = (date) => new Date(date).toISOString().split("T")[0];
         </button>
         <div className="flex justify-center items-center gap-2 mb-2">
           <h2 className="text-2xl font-bold text-center text-white">
-           {BudgetToEdit ? "Edit Budget" : "Set Budget"}
+            {BudgetToEdit ? "Edit Budget" : "Set Budget"}
           </h2>
           <span className="text-2xl text-orange-500">
             <IoBagHandleOutline />
@@ -132,16 +146,23 @@ const formatDate = (date) => new Date(date).toISOString().split("T")[0];
             >
               Category
             </label>
-            <input
-              type="text"
+            <select
+              id="category"
               value={formData.category}
-              onChange={handleChange}
               required
               name="category"
-              id="category"
-              className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-              placeholder="Enter category"
-            />
+              onChange={handleChange}
+              className="w-full p-3 bg-gray-900 bg-opacity-60 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select Type</option>
+              <option value="food">Food</option>
+              <option value="rent">Rent</option>
+              <option value="utilities">Utilities</option>
+              <option value="clothing">Clothing</option>
+              <option value="hospital">Hospital</option>
+              <option value="fuel">Fuel</option>
+              <option value="other">Others</option>
+            </select>
           </div>
 
           <div className="mb-4">
@@ -237,11 +258,15 @@ const formatDate = (date) => new Date(date).toISOString().split("T")[0];
                   : "bg-blue-600 text-white hover:bg-blue-500"
               }`}
             >
-              {isPending ? "Submitting..." : editLoading ? "Editing..." :  "Submit"}
+              {isPending
+                ? "Submitting..."
+                : editLoading
+                ? "Editing..."
+                : "Submit"}
             </button>
           </div>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };

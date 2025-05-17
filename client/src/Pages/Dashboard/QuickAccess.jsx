@@ -23,8 +23,8 @@ const QuickAccess = () => {
       )}
       {showForm === "goal" && <GoalFormModal setShowForm={setShowForm} />}
       {showForm === "budget" && <BudgetFormModal setShowForm={setShowForm} />}
-      <div className="container border border-gray-700 rounded-lg w-[95%] md:w-[95%] bg-[#0f172a] min-h-[200px] md:max-h-[230px] overflow-y-auto scroll-bar">
-        <h1 className="border-b  md:static absolute md:w-full w-[91%] border-gray-700 p-2 text-base">Quick Access</h1>
+      <div className="container border border-gray-400 rounded-lg w-[95%] md:w-[95%]  min-h-[200px] md:max-h-[230px] overflow-y-auto scroll-bar">
+        <h1 className="border-b  md:static absolute md:w-full w-[91%] border-gray-400 p-2 text-base">Quick Access</h1>
         <div className="flex mt-10 md:mt-0 gap-6 md:justify-around  px-2 py-8 w-full ">
           {quickAccess.map((item, index) => (
             <QuickAccessCard quickAccess={item} key={index} />

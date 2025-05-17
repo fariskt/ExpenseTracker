@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import PieChart from "./PieChart";
-import { useExpenses } from "../../hooks/useExpenses";
+import { useExpenses, useGoals } from "../../hooks/useExpenses";
 import ExpenseChart from "../../Pages/Dashboard/Charts/ExpenseChart";
+import GoalChart from "../Dashboard/Charts/GoalChart";
+import SplineAreaChart from "../Dashboard/Charts/SavedvsTarget";
+import BudgetTrackingChart from "../Dashboard/Charts/BudgetChart";
 const AnalyticPage = () => {
   const { data: expenses } = useExpenses();
+  const { data: goals } = useGoals();
   const [monthlyExpense, setMonthlyExpenses] = useState({
     series: [],
     options: {
@@ -89,10 +93,28 @@ const AnalyticPage = () => {
   }, [expenses]);
 
   return (
-    <div className="mt-24 md:mt-10 md:ml-72 mx-auto bg-gray-900 md:w-[80%] w-screen md:p-10 p-1">
-      <h1 className="text-3xl py-5">Analytics</h1>
+    <div className="mt-24 md:mt-10 mx-auto text-black md:w-[90%] w-full px-4 md:px-10 py-8">
+      <h1 className="text-3xl font-bold py-5 text-center md:text-left">
+        📊 Analytics Dashboard
+      </h1>
+
+      <div className="mb-8 rounded-xl p-5 box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+">
+        <h2 className="text-xl font-semibold mb-4">Expense Overview</h2>
         <ExpenseChart />
-      <PieChart />
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-6 mx-5 ">
+        <div className=" rounded-xl p-5 border border-gray-400">
+          <h2 className="text-xl font-semibold mb-4">Spending Trend</h2>
+          <SplineAreaChart />
+        </div>
+
+        <div className=" rounded-xl p-5 border border-gray-400 ">
+          <h2 className="text-xl font-semibold mb-4">Expense Categories</h2>
+          <PieChart />
+        </div>
+      </div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { toast } from "react-hot-toast";
 import AxiosInstance from "../../../Api/AxiosInstance";
 import { useGoals } from "../../../hooks/useExpenses";
 import { LuGoal } from "react-icons/lu";
-
+import { motion } from "framer-motion";
 const GoalFormModal = ({ setShowForm, goalToEdit, setGoalToEdit }) => {
   const { refetch: refechGoals } = useGoals();
 
@@ -81,7 +81,15 @@ const GoalFormModal = ({ setShowForm, goalToEdit, setGoalToEdit }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
-      <div
+      <motion.div
+        initial={{ x: -500, rotate: -15, opacity: 0 }}
+        animate={{ x: 0, rotate: 0, opacity: 1 }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 20,
+          duration: 0.8,
+        }}
         className="md:w-full w-[90%] max-w-lg p-4 md:p-8 rounded-xl shadow-2xl relative border border-blue-500/20"
         style={{
           background: "rgba(17, 24, 39, 0.6)",
@@ -200,7 +208,7 @@ const GoalFormModal = ({ setShowForm, goalToEdit, setGoalToEdit }) => {
             </button>
           </div>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };

@@ -11,13 +11,31 @@ export const getUserBudgets = async (req: Request, res: Response) => {
   if (!budgets) {
     return res.status(404).json({ message: "Budgets not found" });
   }
-  return res.status(200).json({ message: "Budgets fetched successfully", budgets });
+  return res
+    .status(200)
+    .json({ message: "Budgets fetched successfully", budgets });
 };
 
 export const createBudgets = async (req: Request, res: Response) => {
   const budgetBody = req.body;
 
   const { userId } = (req as AuthRequest).user;
+  const existingBudget = await prisma.budget.findUnique({
+    where: {
+      userId_category_startDate: {
+        userId,
+        category: budgetBody.category,
+        startDate: new Date(budgetBody.startDate),
+      },
+    },
+  });
+
+  if (existingBudget) {
+    return res.status(400).json({
+      message: "A budget for this category and start date already exists",
+    });
+  }
+
   const newBudget = await prisma.budget.create({
     data: {
       userId,
@@ -44,7 +62,7 @@ export const updateBudget = async (req: Request, res: Response) => {
   if (!budgetId) {
     return res.status(404).json({ message: "Budget not found" });
   }
-  const { category, limit, period, startDate , endDate} = req.body;
+  const { category, limit, period, startDate, endDate } = req.body;
 
   const existingBudget = await prisma.budget.findUnique({
     where: { id: budgetId },
@@ -57,7 +75,11 @@ export const updateBudget = async (req: Request, res: Response) => {
   const updatedBudget = await prisma.budget.update({
     where: { id: budgetId },
     data: {
-      category, limit, period, startDate , endDate
+      category,
+      limit,
+      period,
+      startDate,
+      endDate,
     },
   });
 

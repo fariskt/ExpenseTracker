@@ -1,9 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import { useExpenses } from "../../hooks/useExpenses";
+import { useExpenses, useGoals } from "../../hooks/useExpenses";
 
 const PieChart = () => {
   const { data:expenses } = useExpenses();
+  const {data: goals} = useGoals();
+
+console.log(goals);
 
   const predefinedCategories = ["fuel", "hospital", "food", "clothing", "other"];
 
@@ -22,7 +25,12 @@ const PieChart = () => {
       },
       legend: {
         labels: {
-          colors: "#FFFFFF",
+          colors: "black",
+        },
+         offsetY: 20,
+        itemMargin: {
+          vertical: 4,
+          horizontal: 12,
         },
       },
       tooltip: {
@@ -88,8 +96,7 @@ const PieChart = () => {
   }
 
   return (
-    <div className="mt-10 bg-slate-800 p-4 rounded-lg items-center md:items-start md:flex-row flex flex-col">
-      <h2 className="my-4 ml-4 text-white">Expense Categories</h2>
+    <div className="mt-10 p-4 rounded-lg items-center md:items-start md:flex-row flex flex-col">
       <ReactApexChart
         options={pieChart.options}
         series={pieChart.series}

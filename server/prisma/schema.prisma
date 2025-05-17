@@ -61,7 +61,8 @@ model Budget {
   period     BudgetPeriod // enum: MONTHLY | WEEKLY | CUSTOM
   startDate  DateTime
   endDate    DateTime
-
+  
+  @@unique([userId, category, startDate]) // ⛔ prevent same category + startDate for same user
   user       User     @relation(fields: [userId], references: [id])
 }
 

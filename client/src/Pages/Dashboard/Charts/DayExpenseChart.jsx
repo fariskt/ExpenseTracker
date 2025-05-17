@@ -34,14 +34,14 @@ const DayExpenseChart = () => {
       legend: {
         position: "top",
         labels: {
-          colors: "white",
+          colors: "black",
         },
       },
       xaxis: {
         categories: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
         labels: {
           style: {
-            colors: "white",
+            colors: "black",
             fontSize: "12px",
           },
         },
@@ -123,7 +123,7 @@ const DayExpenseChart = () => {
   console.log(dayToDayExpense.series);
 
   return (
-    <div className="bg-gray-800 rounded-md text-black py-2">
+    <div className="rounded-md text-black py-2">
       <ErrorBoundary>
         {dayToDayExpense.series.length > 0 ? (
           process.env.NODE_ENV === "test" ? (
