@@ -39,34 +39,45 @@ const GoalFormModal = ({ setShowForm, goalToEdit, setGoalToEdit }) => {
   const { mutate: editGoalMutation, isPending: editGoalisPending } =
     useMutation({
       mutationFn: async (goalForm) => {
-        await AxiosInstance.put(`/goal/update/${goalToEdit.id}`, goalForm);
+        if (!goalToEdit || !goalToEdit.id) {
+          throw new Error("Invalid goal selected for editing");
+        }
+        const res = await AxiosInstance.put(
+          `/goals/update/${goalToEdit.id}`,
+          goalForm
+        );
+        return res.data;
       },
       onSuccess: () => {
-        toast.success("Goal updated Succesfully");
+        toast.success("Goal updated successfully");
         refechGoals();
         setShowForm("");
-        setGoalToEdit(null);
         setFormData({
           name: "",
           target: "",
           saved: "",
           deadline: new Date().toISOString().split("T")[0],
         });
+        setGoalToEdit(null);
       },
       onError: (err) => {
+        console.log(err);
         toast.error("Error updating goal");
-        setGoalToEdit(null);
       },
     });
 
   const handleSubmit = async (e) => {
+    console.log("goalToEdit on submit:", goalToEdit);
     e.preventDefault();
-    if (goalToEdit) {
+
+    if (goalToEdit && goalToEdit.id) {
       editGoalMutation(formData);
     } else {
       postGoalMutation(formData);
     }
   };
+
+  const formatDate = (date) => new Date(date).toISOString().split("T")[0];
 
   useEffect(() => {
     if (goalToEdit) {
@@ -74,7 +85,9 @@ const GoalFormModal = ({ setShowForm, goalToEdit, setGoalToEdit }) => {
         name: goalToEdit.name || "",
         target: goalToEdit.target || "",
         saved: goalToEdit.saved || "",
-        deadline: goalToEdit.deadline || new Date().toISOString().split("T")[0],
+        deadline: goalToEdit.deadline
+          ? formatDate(goalToEdit.deadline)
+          : formatDate(new Date()),
       });
     }
   }, [goalToEdit]);
@@ -204,7 +217,11 @@ const GoalFormModal = ({ setShowForm, goalToEdit, setGoalToEdit }) => {
                   : "bg-blue-600 text-white hover:bg-blue-500"
               }`}
             >
-              {isPending ? "Submitting..." : editGoalisPending ? "Please wait..." : "Submit"}
+              {isPending
+                ? "Submitting..."
+                : editGoalisPending
+                ? "Please wait..."
+                : "Submit"}
             </button>
           </div>
         </form>

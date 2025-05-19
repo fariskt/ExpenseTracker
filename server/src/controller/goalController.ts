@@ -65,7 +65,7 @@ export const updateGoal = async (req: Request, res: Response) => {
       name,
       target,
       saved,
-      deadline,
+      deadline: new Date(deadline),
     },
   });
 
