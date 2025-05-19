@@ -1,8 +1,4 @@
 import { useState } from "react";
-import { GiClothes } from "react-icons/gi";
-import { IoFastFood } from "react-icons/io5";
-import { RiHospitalFill } from "react-icons/ri";
-import { BsFillFuelPumpFill, BsFillPatchQuestionFill } from "react-icons/bs";
 import { TbEdit } from "react-icons/tb";
 import { MdDeleteOutline, MdSearch } from "react-icons/md";
 import ExpenseFormModal from "../Dashboard/Forms/ExpenseForm";
@@ -11,11 +7,11 @@ import { useExpenses } from "../../hooks/useExpenses";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import AxiosInstance from "../../Api/AxiosInstance";
-import Loader from "../../Components/ui/Loading";
-import PulseLoader from "../../Components/ui/PulseLoader";
 import DeleteButton from "../../Components/ui/DeleteButton";
 import AddButton from "../../Components/ui/AddButton";
 import { searchHook } from "../../hooks/useSearch";
+import ProgressLoader from "../../Components/ui/ProgressLoader";
+import { useDeleteSelectedId } from "../../hooks/useSelectIdDelete";
 
 const ExpenseDetails = () => {
   const { showForm, setShowForm } = useUIStore();
@@ -24,22 +20,8 @@ const ExpenseDetails = () => {
   const [deleteExpenseId, setExpenseDeleteId] = useState(null);
   const [selectRows, setSelectedRows] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState(null);
-
-  const getCategoryIcon = (category) => {
-    switch (category.toLowerCase()) {
-      case "food":
-        return <IoFastFood className="text-yellow-400" />;
-      case "hospital":
-        return <RiHospitalFill className="text-red-500" />;
-      case "fuel":
-        return <BsFillFuelPumpFill className="text-blue-400" />;
-      case "clothing":
-        return <GiClothes className="text-green-400" />;
-      default:
-        return <BsFillPatchQuestionFill className="text-orange-600" />;
-    }
-  };
+  const [selectedFilter, setSelectedFilter] = useState("latest");
+  const {mutate:deleteSelectedExpenseMutation, isPending:selectedDeleteIsPending } = useDeleteSelectedId("expenses")
 
   const expenseDate = (dateString) => {
     const date = new Date(dateString);
@@ -92,23 +74,32 @@ const createExpense = () => {
   setShowForm("expenseForm");
 };
 
+
+const handleSelectedExpenseDelete= ()=> {
+  deleteSelectedExpenseMutation(selectRows, {
+    onSuccess: ()=> {
+      refetch()
+    }
+  })
+}
+
 const filteredExpenses = searchHook(expenses, searchInput, selectedFilter);
 const allIds = (filteredExpenses && filteredExpenses.map((item) => item.id)) || [];
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-96">
-        <Loader />
+      <div className="flex items-center justify-center min-h-screen">
+        <ProgressLoader />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-8 pt-24 md:pt-16 md:pl-28 mx-auto md:px-10 px-2  max-w-[100vw]">
+    <div className="flex flex-col gap-8 pt-10 md:pt-16 md:pl-28 mx-auto md:px-10 px-2  max-w-[100vw]">
       <div className="flex justify-between">
-        <div className="flex flex-col text-sm ">
+        <div className="flex flex-col text-sm md:mx-0 mx-2">
           <h1 className="text-2xl md:text-3xl font-bold w-full">Expenses</h1>
-          <p className="text-gray-500">showing expenses 10 of 29{}</p>
+          <p className="text-gray-500">showing expenses {filteredExpenses?.length} of {expenses?.length}</p>
         </div>
         <AddButton onClick={createExpense} />
       </div>
@@ -119,8 +110,8 @@ const allIds = (filteredExpenses && filteredExpenses.map((item) => item.id)) || 
           setExpenseToEdit={setExpenseToEdit}
         />
       )}
-      <div className="overflow-x-auto rounded-xl shadow border bg-white">
-        <div className="flex justify-between mx-4 py-4">
+      <div className=" rounded-xl shadow border bg-white">
+        <div className="flex justify-between items-center mx-4 py-4">
           <div>
             <span className="absolute text-xl text-gray-400 mt-2 ml-1">
               <MdSearch />
@@ -129,7 +120,7 @@ const allIds = (filteredExpenses && filteredExpenses.map((item) => item.id)) || 
               type="text"
               value={searchInput}
               onChange={(e)=> setSearchInput(e.target.value)}
-              placeholder="search goals"
+              placeholder="search expenses"
               className="border pl-7 outline-gray-300 p-1 rounded-md"
             />
           </div>
@@ -140,17 +131,17 @@ const allIds = (filteredExpenses && filteredExpenses.map((item) => item.id)) || 
               onChange={(e)=> setSelectedFilter(e.target.value)}
               className="border border-gray-400 p-1 rounded-md outline-gray-500"
             >
-              <option value="">Filter by</option>
-              <option value="newest">Newest</option>
+              <option value="latest">Latest</option>
               <option value="oldest">Oldest</option>
             </select>
           </div>
         </div>
-        <table className="w-full text-sm text-left border-separate border-spacing-0">
-          <thead className="bg-gray-50 text-gray-600">
+        <div className="overflow-x-auto">
+        <table className=" text-sm text-left w-full border-separate border-spacing-0">
+          <thead className="bg-blue-50 text-gray-600">
             <tr>
               {filteredExpenses.length > 0 && (
-                <th className="px-6 py-4">
+                <th className="px-6 py-4 border-y border-y-gray-100">
                   <input
                     type="checkbox"
                     checked={selectRows.length === allIds.length}
@@ -159,19 +150,19 @@ const allIds = (filteredExpenses && filteredExpenses.map((item) => item.id)) || 
                   />
                 </th>
               )}
-              <th className="px-6 py-4 border-b border-gray-200">Name</th>
-              <th className="px-6 py-4 border-b border-gray-200">Category</th>
-              <th className="px-6 py-4 border-b border-gray-200">Date</th>
-              <th className="px-6 py-4 border-b border-gray-200">Amount</th>
-              <th className="px-6 py-4 border-b border-gray-200">Action</th>
+              <th className="px-6 py-4 border-y border-gray-100">Name</th>
+              <th className="px-6 py-4 border-y border-gray-100">Category</th>
+              <th className="px-6 py-4 border-y border-gray-100">Date</th>
+              <th className="px-6 py-4 border-y border-gray-100">Amount</th>
+              <th className="px-6 py-4 border-y border-gray-100">Action</th>
               {selectRows.length > 0 && (
-                <th className="absolute right-16 mt-3">
+                <th className={`absolute ${selectedDeleteIsPending ? "animate-pulse" : ""} right-16 mt-3`} onClick={handleSelectedExpenseDelete}>
                   <DeleteButton />
                 </th>
               )}
             </tr>
           </thead>
-          <tbody className="text-gray-800 divide-y divide-gray-100">
+          <tbody className="text-gray-800 divide-y divide-gray-100 ">
             {filteredExpenses?.length > 0 ? (
               filteredExpenses.map((item, index) => (
                 <tr key={index} className="hover:bg-gray-50 transition-colors">
@@ -193,23 +184,23 @@ const allIds = (filteredExpenses && filteredExpenses.map((item) => item.id)) || 
                   <td className="px-6 py-4">
                     <span
                       className={`${
-                        item.category === "fuel"
-                          ? "bg-orange-100 text-orange-700"
-                          : item.category === "food"
-                          ? "bg-green-200"
-                          : "bg-blue-400"
+                        item.category === "fuel" ? "bg-orange-100 text-orange-700" : item.category === "food" ?  "bg-green-200" : item.category === "clothing" ? "bg-purple-300"  : "bg-blue-300"
                       }  text-xs font-medium px-3 py-1 rounded-full capitalize`}
                     >
                       {item.category}
                     </span>
                   </td>
-                  <td className="px-6 py-4 font-semibold text-gray-800">
+                  <td className="hidden md:block px-6 py-4 w-full font-semibold text-gray-800">
                     {item.date &&
                       new Date(item.date).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "short",
                         day: "numeric",
                       })}
+                  </td>
+                  <td className="md:hidden block px-6 py-4 w-full font-semibold text-gray-800">
+                    {item.date &&
+                      new Date(item.date).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 font-semibold text-gray-800">
                     ₹{item.amount}
@@ -243,6 +234,7 @@ const allIds = (filteredExpenses && filteredExpenses.map((item) => item.id)) || 
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

@@ -6,6 +6,8 @@ import Axioinstance from "../Api/AxiosInstance";
 import { useAuthStore } from "../store/useAuthStore";
 import Loader from "./ui/Loading";
 import { Outlet, useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
+import ProgressLoader from "./ui/ProgressLoader";
 
 const Layout = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -34,35 +36,19 @@ const Layout = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
-useEffect(() => {
-  if (!isLoading && (!data || !data.id)) {
-    navigate("/login");
-  }
-}, [data, isLoading, navigate]);
-
-
-
-  
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Loader />
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (!isLoading && (!data || !data.id)) {
+      navigate("/login");
+    }
+  }, [data, isLoading, navigate]);
 
   return (
-    <div className="flex min-h-screen">
-      {isMobile ? (
-        <MobileSideBar  />
-      ) : (
-        <SideBar  />
-      )}
-
-      <div className=" flex-1 md:pb-10 pb-20">
-        <Outlet />
+    <div className="flex flex-col min-h-screen">
+      <div className="flex flex-1">
+        {isMobile ? <MobileSideBar /> : <SideBar />}
+        <div className="flex-1 md:pb-10 pb-20 md:w-auto w-full">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

@@ -3,12 +3,16 @@ import ReactApexChart from "react-apexcharts";
 import { useExpenses, useGoals } from "../../hooks/useExpenses";
 
 const PieChart = () => {
-  const { data:expenses } = useExpenses();
-  const {data: goals} = useGoals();
+  const { data: expenses, isLoading } = useExpenses();
+  console.log("expenses ", expenses);
 
-console.log(goals);
-
-  const predefinedCategories = ["fuel", "hospital", "food", "clothing", "other"];
+  const predefinedCategories = [
+    "fuel",
+    "hospital",
+    "food",
+    "clothing",
+    "other",
+  ];
 
   const [pieChart, setPieChart] = useState({
     series: [],
@@ -27,7 +31,7 @@ console.log(goals);
         labels: {
           colors: "black",
         },
-         offsetY: 20,
+        offsetY: 20,
         itemMargin: {
           vertical: 4,
           horizontal: 12,
@@ -38,14 +42,19 @@ console.log(goals);
           formatter: (val) => `${val.toFixed(2)}%`,
         },
       },
-      responsive: [
+       responsive: [
         {
-          breakpoint: 400,
+          breakpoint: 480,
           options: {
-            chart: { width: 300 },
+            chart: {
+              width: 300,
+            },
             legend: {
-              position: "bottom",
-              labels: { colors: "#FFFFFF" },
+              show: true,
+              offsetY: 0,
+              labels: {
+                colors: "black",
+              },
             },
           },
         },
@@ -58,7 +67,6 @@ console.log(goals);
       acc[category] = 0;
       return acc;
     }, {});
-    
 
     expenses?.forEach((item) => {
       if (item.category && categoryTotals.hasOwnProperty(item.category)) {
@@ -69,7 +77,10 @@ console.log(goals);
       }
     });
 
-    const totalAmount = Object.values(categoryTotals).reduce((sum, value) => sum + value, 0);
+    const totalAmount = Object.values(categoryTotals).reduce(
+      (sum, value) => sum + value,
+      0
+    );
 
     const series = Object.values(categoryTotals).map((value) => {
       if (totalAmount > 0) {
@@ -78,7 +89,9 @@ console.log(goals);
       return 0;
     });
 
-    const labels = predefinedCategories.map((category) => category.toUpperCase());
+    const labels = predefinedCategories.map((category) =>
+      category.toUpperCase()
+    );
 
     setPieChart((prevChart) => ({
       ...prevChart,
@@ -88,15 +101,21 @@ console.log(goals);
   };
 
   useEffect(() => {
-    getChartData();
+    if (Array.isArray(expenses)) {
+      getChartData();
+    }
   }, [expenses]);
 
-  if(!expenses || expenses.length === 0){
-    return
+  if (!expenses) {
+    return <div>Loading chart...</div>;
+  }
+
+  if (pieChart.series.length === 0 || pieChart.options.labels.length === 0) {
+    return <div>No data available for chart</div>;
   }
 
   return (
-    <div className="mt-10 p-4 rounded-lg items-center md:items-start md:flex-row flex flex-col">
+    <div className="mt-10 p-4 rounded-lg items-center md:items-start md:flex-row flex flex-col w-full ">
       <ReactApexChart
         options={pieChart.options}
         series={pieChart.series}

@@ -74,3 +74,17 @@ export const updateGoal = async (req: Request, res: Response) => {
     expense: updatedGoal,
   });
 };
+
+export const deleteSelectedGoal = async (req: Request, res: Response) => {
+  const goalIds = req.body;
+  if (!goalIds || goalIds.length === 0) {
+    return res.status(404).json({ message: "Please Provide goals" });
+  }
+  const selectedIdToDelete = await prisma.goal.deleteMany({
+    where: { id: { in: goalIds } },
+  });
+  return res.status(200).json({
+    message: "Selected goals deleted!",
+    count: selectedIdToDelete.count,
+  });
+};

@@ -80,3 +80,20 @@ export const updateExpense = async (req: Request, res: Response) => {
     expense: updatedExpense,
   });
 };
+
+
+export const deleteSelectedExpenses = async (req: Request, res: Response) => {
+  const expenseIds = req.body;
+  console.log(req.body);
+  
+  if (!expenseIds || expenseIds.length === 0) {
+    return res.status(404).json({ message: "Please Provide expenses to delete" });
+  }
+  const selectedIdToDelete = await prisma.expense.deleteMany({
+    where: { id: { in: expenseIds } },
+  });
+  return res.status(200).json({
+    message: "Selected expenses deleted!",
+    count: selectedIdToDelete.count,
+  });
+};

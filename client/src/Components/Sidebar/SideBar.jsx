@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { LuGoal, LuLayoutDashboard } from "react-icons/lu";
 import { BsBag } from "react-icons/bs";
 import { TbBrandGoogleAnalytics } from "react-icons/tb";
-import { IoBagHandleOutline } from "react-icons/io5";
+import { IoBagHandleOutline, IoLogOutOutline } from "react-icons/io5";
 import { useAuthStore } from "../../store/useAuthStore";
 import { motion } from "framer-motion";
 const SideBar = () => {
@@ -22,12 +22,12 @@ const SideBar = () => {
           label="Analytics"
         />
       </nav>
-      <img
+      <span
         onClick={() => setOpenProfile(!openProfile)}
-        className="h-10 w-10 rounded-full object-cover ring-2 ring-blue-500"
-        src="https://media.istockphoto.com/id/467555084/photo/silhouette-girl-portrait.jpg?s=612x612&w=0&k=20&c=oVEy3rsRiDsNNENKckxk6MselXjBsaR987BKLWjymdk="
-        alt="User"
-      />
+        className="text-white text-xl pb-3 cursor-pointer"
+      >
+        <IoLogOutOutline />
+      </span>
       {openProfile && (
         <motion.div
           initial={{ y: 300, rotate: -15, opacity: 0 }}
@@ -41,10 +41,6 @@ const SideBar = () => {
           className="fixed bottom-4 left-[70px] w-52 bg-[#1a1a2e]/90 backdrop-blur-md text-white rounded-2xl shadow-[0_0_20px_rgba(138,43,226,0.4)] border border-gray-700 p-5"
         >
           <div className="flex flex-col items-center space-y-4">
-            <h2 className="text-lg font-semibold tracking-wide text-purple-300">
-              {user.name}
-            </h2>
-
             <button
               // onClick={handleLogout}
               className="w-full py-2 bg-gradient-to-r from-red-600 via-pink-600 to-red-700 hover:from-red-700 hover:to-pink-700 rounded-full text-sm font-medium tracking-wide shadow-lg hover:shadow-red-500/40 transition duration-300"

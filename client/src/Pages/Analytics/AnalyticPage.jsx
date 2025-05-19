@@ -93,24 +93,23 @@ const AnalyticPage = () => {
   }, [expenses]);
 
   return (
-    <div className="mt-24 md:mt-10 mx-auto text-black md:w-[90%] w-full px-4 md:px-10 py-8">
+    <div className=" mx-auto text-black md:w-[90%] w-screen px-4 md:px-5 py-8 ">
       <h1 className="text-3xl font-bold py-5 text-center md:text-left">
         📊 Analytics Dashboard
       </h1>
 
-      <div className="mb-8 rounded-xl p-5 box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-">
+      <div className="mb-8 rounded-xl  p-5 box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;">
         <h2 className="text-xl font-semibold mb-4">Expense Overview</h2>
         <ExpenseChart />
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6 mx-5 ">
-        <div className=" rounded-xl p-5 border border-gray-400">
+      <div className="grid md:grid-cols-2 gap-6 md:px-4 px-0">
+        <div className=" rounded-xl p-5 border border-gray-400 w-[95%] md:w-auto">
           <h2 className="text-xl font-semibold mb-4">Spending Trend</h2>
           <SplineAreaChart />
         </div>
 
-        <div className=" rounded-xl p-5 border border-gray-400 ">
+        <div className=" rounded-xl p-5 border border-gray-400 w-[95%] md:w-auto">
           <h2 className="text-xl font-semibold mb-4">Expense Categories</h2>
           <PieChart />
         </div>

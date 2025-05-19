@@ -2,7 +2,7 @@ import { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { useGoals } from "../../../hooks/useExpenses";
 
-const GoalChart = ({goals}) => {  
+const GoalChart = ({ goals }) => {
   const { onTrack, offTrack, closed, atRisk } = goals.reduce(
     (acc, goal) => {
       const { saved, target, deadline } = goal;
@@ -49,14 +49,19 @@ const GoalChart = ({goals}) => {
           breakpoint: 480,
           options: {
             chart: {
-              width: 200,
+              width: 300,
             },
             legend: {
-              show: false,
+              show: true,
+              offsetY: 0,
+              labels: {
+                colors: "black",
+              },
             },
           },
         },
       ],
+
       legend: {
         position: "right",
         offsetY: 20,
@@ -66,15 +71,14 @@ const GoalChart = ({goals}) => {
         },
         height: 230,
         labels: {
-          colors: "#ffffff", 
+          colors: "black",
           useSeriesColors: false,
         },
       },
     },
   });
 
-  
-    if (!goals) {
+  if (!goals) {
     return;
   }
 
@@ -83,7 +87,9 @@ const GoalChart = ({goals}) => {
       <div>
         <div className="chart-wrap ">
           <div id="chart">
-            <h4 className="hidden md:block relative top-[130px] left-[110px]">Goals</h4>
+            <h4 className="hidden md:block relative top-[130px] left-[110px]">
+              Goals
+            </h4>
             <ReactApexChart
               options={state.options}
               series={state.series}

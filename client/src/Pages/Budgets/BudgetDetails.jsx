@@ -8,9 +8,10 @@ import AxiosInstance from "../../Api/AxiosInstance";
 import BudgetFormModal from "../Dashboard/Forms/BudgetForm";
 import { useBudgets } from "../../hooks/useExpenses";
 import DeleteButton from "../../Components/ui/DeleteButton";
-import Loader from "../../Components/ui/Loading";
 import AddButton from "../../Components/ui/AddButton";
 import { searchHook } from "../../hooks/useSearch";
+import ProgressLoader from "../../Components/ui/ProgressLoader";
+import { useDeleteSelectedId } from "../../hooks/useSelectIdDelete";
 
 const BudgetDetails = () => {
   const { showForm, setShowForm } = useUIStore();
@@ -18,7 +19,8 @@ const BudgetDetails = () => {
   const [BudgetToEdit, setBudgetToEdit] = useState(null);
   const [deletingBudgetId, setDeletingBudgetId] = useState(null);
   const [searchInput, setSearchInput] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState(null);
+  const [selectedFilter, setSelectedFilter] = useState("latest");
+  const {mutate:deleteSelectedBudgetMutation, isPending: selectedBugetPending } = useDeleteSelectedId("budgets")
 
   const BudgetDate = (dateString) => {
     const date = new Date(dateString);
@@ -76,20 +78,29 @@ const BudgetDetails = () => {
 
 const filteredBudgets = searchHook(budgets, searchInput, selectedFilter);
 
+const handleSelectedExpenseDelete= ()=> {
+  deleteSelectedBudgetMutation(selectedBudgets, {
+    onSuccess: ()=> {
+      refetch()
+    }
+  })
+}
+
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-96">
-        <Loader />
+      <div className="flex items-center justify-center min-h-screen ">
+        <ProgressLoader />
       </div>
     );
   }
+
   return (
     <div className=" w-full mx-auto  rounded-lg min-h-[200px] md:max-h-[230px]">
-      <div className="flex flex-col  gap-8 pt-24 md:pt-16 md:pl-28 mx-auto md:px-10 px-2  max-w-[100vw] min-h-screen">
+      <div className="flex flex-col  gap-8 pt-10 md:pt-16 md:pl-28 mx-auto md:px-10 px-2  max-w-[100vw] min-h-screen">
         <div className="flex justify-between">
-          <div className="flex flex-col text-sm ">
+          <div className="flex flex-col text-sm md:mx-0 mx-2">
             <h1 className="text-2xl md:text-3xl font-bold  w-full">Budgets</h1>
-            <p className="text-gray-500">showing budgets 10 of 29{}</p>
+            <p className="text-gray-500">showing budgets {filteredBudgets?.length} of {budgets?.length}</p>
           </div>
           <AddButton onClick={createGoalFormOpen} />
         </div>
@@ -100,7 +111,7 @@ const filteredBudgets = searchHook(budgets, searchInput, selectedFilter);
             setBudgetToEdit={setBudgetToEdit}
           />
         )}
-        <div className="overflow-x-auto rounded-xl shadow border bg-white">
+        <div className="rounded-xl shadow border bg-white">
           <div className="flex justify-between mx-4 py-4">
             <div>
               <span className="absolute text-xl text-gray-400 mt-2 ml-1">
@@ -116,22 +127,23 @@ const filteredBudgets = searchHook(budgets, searchInput, selectedFilter);
               />
             </div>
             <div>
-              <select
-                value={selectedFilter}
-                onChange={(e) => setSelectedFilter(e.target.value)}
-                className="border outline-none p-1 rounded-md"
-              >
-                <option value="">All Categories</option>
-                <option value="hospital">Hospital</option>
-                <option value="food">Food</option>
-                <option value="fuel">Fuel</option>
-              </select>
-            </div>
+            <select
+              name="filter"
+              value={selectedFilter}
+              onChange={(e)=> setSelectedFilter(e.target.value)}
+              className="border border-gray-400 p-1 rounded-md outline-gray-500"
+            >
+              <option value="latest">Latest</option>
+              <option value="oldest">Oldest</option>
+            </select>
           </div>
+          </div>
+          <div className="overflow-x-auto">
+
           <table className="w-full text-sm text-left">
-            <thead className="bg-gray-50 text-gray-600">
+            <thead className="bg-blue-50 text-gray-600">
               <tr>
-                <th className="px-6 py-4">
+               {filteredBudgets.length > 0 && <th className="px-6 py-4 border-y border-gray-100">
                   <input
                     id="selectAll"
                     type="checkbox"
@@ -139,15 +151,15 @@ const filteredBudgets = searchHook(budgets, searchInput, selectedFilter);
                     onChange={handleSelectAll}
                     className="accent-blue-500"
                   />
-                </th>
-                <th className="px-6 py-4">Budget</th>
-                <th className="px-6 py-4">Limit</th>
-                <th className="px-6 py-4">Period</th>
-                <th className="px-6 py-4">Start Date</th>
-                <th className="px-6 py-4">End Date</th>
-                <th className="px-6 py-4">Actions</th>
+                </th>}
+                <th className="px-6 py-4 border-y border-gray-100">Budget</th>
+                <th className="px-6 py-4 border-y border-gray-100">Limit</th>
+                <th className="px-6 py-4 border-y border-gray-100">Period</th>
+                <th className="px-6 py-4 border-y border-gray-100">Start Date</th>
+                <th className="px-6 py-4 border-y border-gray-100">End Date</th>
+                <th className="px-6 py-4 border-y border-gray-100">Actions</th>
                 {selectedBudgets.length > 0 && (
-                  <th className="absolute right-16 mt-3">
+                  <th className={`absolute right-16 mt-3 ${selectedBugetPending ? "animate-pulse" : ""} `} onClick={handleSelectedExpenseDelete}>
                     <DeleteButton />
                   </th>
                 )}
@@ -210,6 +222,7 @@ const filteredBudgets = searchHook(budgets, searchInput, selectedFilter);
               )}
             </tbody>
           </table>
+        </div>
         </div>
       </div>
     </div>

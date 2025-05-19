@@ -60,7 +60,7 @@ const BudgetTrackingChart = () => {
     xaxis: {
       categories,
       title: {
-        text: 'Amount ($)'
+        text: 'Amount'
       }
     },
     legend: {

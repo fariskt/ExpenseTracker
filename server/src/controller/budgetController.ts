@@ -88,3 +88,18 @@ export const updateBudget = async (req: Request, res: Response) => {
     expense: updatedBudget,
   });
 };
+
+
+export const deleteSelectedBudget = async (req: Request, res: Response) => {
+  const budgetIds  = req.body;
+  if (!budgetIds || budgetIds.length === 0) {
+    return res.status(404).json({ message: "Please Provide Budgets to delete" });
+  }
+  const selectedIdToDelete = await prisma.budget.deleteMany({
+    where: { id: { in: budgetIds } },
+  });
+  return res.status(200).json({
+    message: "Selected budget deleted!",
+    count: selectedIdToDelete.count,
+  });
+};

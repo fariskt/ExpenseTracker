@@ -46,13 +46,13 @@ const GoalComparisonBarChart = () => {
     },
     tooltip: {
       y: {
-        formatter: (val) => `$${val}`,
+        formatter: (val) => `₹${val}`,
       },
     },
   };
 
   return (
-    <div>
+    <div className="">
       <h2 className="text-xl font-semibold mb-2">Goal vs Saved</h2>
       <ReactApexChart
         options={options}

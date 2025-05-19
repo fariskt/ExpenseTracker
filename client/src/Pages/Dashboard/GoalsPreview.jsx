@@ -27,7 +27,7 @@ const GoalsPreview = () => {
           +
         </button>
       </div>
-      <div className="flex flex-col-reverse md:flex-row items-center w-full gap-6 mt-4">
+      <div className="flex flex-col-reverse md:flex-row   w-full gap-6 mt-4">
         <div className="md:ml-8 border border-gray-200 rounded-2xl p-3">
           <GoalChart goals={goals} />
         </div>
@@ -54,7 +54,7 @@ const GoalsPreview = () => {
 
               return (
                 <div
-                  className="flex flex-col md:flex-row md:ml-8 md:items-center justify-between md:max-w-2xl max-w-[85%] mx-auto  w-full gap-4 mb-6"
+                  className="flex flex-col md:flex-row md:ml-8 md:items-center justify-between md:max-w-xl max-w-[85%] mx-auto  w-full gap-4 mb-6"
                   key={goal.id}
                 >
                   <div className="flex items-center  justify-between gap-4">
@@ -76,12 +76,12 @@ const GoalsPreview = () => {
                     <div className="md:hidden block relative w-14 h-14">
                       <svg className="transform -rotate-90" viewBox="0 0 36 36">
                         <path
-                          className="text-gray-600"
+                          className="text-gray-400"
                           stroke="currentColor"
                           strokeWidth="3"
                           fill="none"
                           d="M18 2.0845
-         a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 31.831
          a 15.9155 15.9155 0 0 1 0 -31.831"
                         />
                         <path
@@ -95,7 +95,7 @@ const GoalsPreview = () => {
          a 15.9155 15.9155 0 0 1 0 -31.831"
                         />
                       </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-xs">
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-xs">
                         <span>{percentage.toFixed(0)}%</span>
                       </div>
                     </div>
