@@ -52,7 +52,7 @@ const GoalDetails = () => {
     setShowForm("goalForm");
     setGoalToEdit(goal);
   };
-const filteredGoals = searchHook(goals, searchInput, selectedFilter);
+const filteredGoals = searchHook(goals, searchInput, selectedFilter) || [];
 
   const allIds = (filteredGoals && filteredGoals.map((item) => item.id)) || [];
 
@@ -99,7 +99,7 @@ const filteredGoals = searchHook(goals, searchInput, selectedFilter);
         <div className="flex flex-col text-sm md:mx-0 mx-2">
 
         <h1 className="text-2xl md:text-3xl font-bold w-full">Goals</h1>
-        <p className="text-gray-500">showing goals {filteredGoals.length} of {goals.length}</p>
+        <p className="text-gray-500">showing goals {filteredGoals?.length} of {goals?.length}</p>
         </div>
         <AddButton onClick={createGoal} />
       </div>

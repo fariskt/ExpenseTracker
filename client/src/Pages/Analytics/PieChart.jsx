@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { useExpenses, useGoals } from "../../hooks/useExpenses";
+import ProgressLoader from "../../Components/ui/ProgressLoader";
 
 const PieChart = () => {
   const { data: expenses, isLoading } = useExpenses();
@@ -106,8 +107,12 @@ const PieChart = () => {
     }
   }, [expenses]);
 
-  if (!expenses) {
-    return <div>Loading chart...</div>;
+   if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-96">
+        <ProgressLoader />
+      </div>
+    );
   }
 
   if (pieChart.series.length === 0 || pieChart.options.labels.length === 0) {

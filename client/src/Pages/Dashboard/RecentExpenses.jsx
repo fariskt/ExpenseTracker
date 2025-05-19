@@ -21,7 +21,7 @@ const RecentExpenses = () => {
           </button>
         </div>
         {isLoading ? (
-          <div className="flex items-center justify-center mt-16">
+          <div className="flex items-center justify-center mt-16 bg-gray-300 w-fit mx-auto">
             <PulseLoader />
           </div>
         ) : expenses?.length > 0 ? (
