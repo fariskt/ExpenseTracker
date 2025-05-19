@@ -1,6 +1,6 @@
 import "./App.css";
 import Layout from "./Components/Layout";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import Login from "./Pages/Auth/Login";
 import Signup from "./Pages/Auth/Signup";
 import { Toaster } from "react-hot-toast";
@@ -12,7 +12,7 @@ import BudgetDetails from "./Pages/Budgets/BudgetDetails";
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
           <Toaster/>
         <Routes>
           <Route path="/login" element={<Login/>}/>
@@ -26,7 +26,7 @@ function App() {
           
           </Route>
         </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

@@ -1,46 +1,93 @@
-
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { register } from "../../hooks/useAuth";
 import { useFormik } from "formik";
-import * as Yup from "yup"
+import * as Yup from "yup";
+import { useMutation } from "@tanstack/react-query";
 
 const themes = [
-  { id: 1, background: "bg-[#1A1A2E]", color: "text-white", primary: "bg-[#0F3460]" },
-  { id: 2, background: "bg-[#461220]", color: "text-white", primary: "bg-[#E94560]" },
-  { id: 3, background: "bg-[#192A51]", color: "text-white", primary: "bg-[#967AA1]" },
-  { id: 4, background: "bg-[#F7B267]", color: "text-black", primary: "bg-[#F4845F]" },
-  { id: 5, background: "bg-[#F25F5C]", color: "text-black", primary: "bg-[#642B36]" },
-  { id: 6, background: "bg-[#231F20]", color: "text-white", primary: "bg-[#BB4430]" },
+  {
+    id: 1,
+    background: "bg-[#1A1A2E]",
+    color: "text-white",
+    primary: "bg-[#0F3460]",
+  },
+  {
+    id: 2,
+    background: "bg-[#461220]",
+    color: "text-white",
+    primary: "bg-[#E94560]",
+  },
+  {
+    id: 3,
+    background: "bg-[#192A51]",
+    color: "text-white",
+    primary: "bg-[#967AA1]",
+  },
+  {
+    id: 4,
+    background: "bg-[#F7B267]",
+    color: "text-black",
+    primary: "bg-[#F4845F]",
+  },
+  {
+    id: 5,
+    background: "bg-[#F25F5C]",
+    color: "text-black",
+    primary: "bg-[#642B36]",
+  },
+  {
+    id: 6,
+    background: "bg-[#231F20]",
+    color: "text-white",
+    primary: "bg-[#BB4430]",
+  },
 ];
 
 const validationSchema = Yup.object({
-  name: Yup.string().min(3, "Name must be at least 3 characters").required("Name is Required"),
+  name: Yup.string()
+    .min(3, "Name must be at least 3 characters")
+    .required("Name is Required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string()
     .min(4, "Password must be at least 4 characters")
     .required("Password is required"),
-    confirmPassword: Yup.string().oneOf([Yup.ref("password"), null], "Password must match").required("Confirm password is required")
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "Password must match")
+    .required("Confirm password is required"),
 });
 
 export default function Signup() {
-    const [theme, setTheme] = useState(themes[0])
+  const [theme, setTheme] = useState(themes[0]);
 
-   const formik = useFormik({
-     initialValues: {
+  const { mutate: registerUser, isPending } = useMutation({
+    mutationFn: register,
+    onSuccess: () => {
+      toast.success("Please login with your credentials!");
+      navigate("/login");
+    },
+    onError: (err) => {
+      toast.error(err.response.data.message || "Registration failed");
+    },
+  });
+
+  const formik = useFormik({
+    initialValues: {
       name: "",
-       email: "",
-       password: "",
-       confirmPassword:""
-     },
-     validationSchema,
-     onSubmit: (values) => {
-       register(values);
-     },
-   });
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      registerUser(values);
+    },
+  });
 
   return (
-    <div className={`min-h-screen flex items-center justify-center ${theme.background} ${theme.color} transition-all duration-300`}>
+    <div
+      className={`min-h-screen flex items-center justify-center ${theme.background} ${theme.color} transition-all duration-300`}
+    >
       <div className="relative w-[26rem]">
         <div className="absolute -top-6 -left-6 w-32 h-32 rounded-full bg-current opacity-20 blur-3xl"></div>
         <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full bg-current opacity-20 blur-3xl"></div>
@@ -51,7 +98,9 @@ export default function Signup() {
             alt="illustration"
             className="absolute -top-14 right-0 w-44 opacity-60 -z-10"
           />
-          <h1 className="text-2xl font-bold text-center mb-6 opacity-80">SIGN UP</h1>
+          <h1 className="text-2xl font-bold text-center mb-6 opacity-80">
+            SIGN UP
+          </h1>
           <form onSubmit={formik.handleSubmit}>
             <input
               type="text"
@@ -62,8 +111,10 @@ export default function Signup() {
               className="w-full p-3 mb-4 rounded-md bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
               required
             />
-              {formik.touched.name && formik.errors.name && (
-              <div className="text-red-400 text-sm mb-2">{formik.errors.name}</div>
+            {formik.touched.name && formik.errors.name && (
+              <div className="text-red-400 text-sm mb-2">
+                {formik.errors.name}
+              </div>
             )}
             <input
               type="email"
@@ -75,7 +126,9 @@ export default function Signup() {
               required
             />
             {formik.touched.email && formik.errors.email && (
-              <div className="text-red-400 text-sm mb-2">{formik.errors.email}</div>
+              <div className="text-red-400 text-sm mb-2">
+                {formik.errors.email}
+              </div>
             )}
             <input
               type="password"
@@ -87,7 +140,9 @@ export default function Signup() {
               required
             />
             {formik.touched.password && formik.errors.password && (
-              <div className="text-red-400 text-sm mb-2">{formik.errors.password}</div>
+              <div className="text-red-400 text-sm mb-2">
+                {formik.errors.password}
+              </div>
             )}
             <input
               type="password"
@@ -98,14 +153,23 @@ export default function Signup() {
               className="w-full p-3 mb-4 rounded-md bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
               required
             />
-            {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-              <div className="text-red-400 text-sm mb-2">{formik.errors.confirmPassword}</div>
-            )}
+            {formik.touched.confirmPassword &&
+              formik.errors.confirmPassword && (
+                <div className="text-red-400 text-sm mb-2">
+                  {formik.errors.confirmPassword}
+                </div>
+              )}
+
             <button
               type="submit"
-              className={`w-full py-3 rounded-md font-bold tracking-wide ${theme.primary} ${theme.color} hover:scale-105 transition-transform`}
+              disabled={isPending}
+              className={`w-full py-3 rounded-md font-bold tracking-wide ${
+                isPending && "bg-gray-700"
+              }  ${theme.primary} ${
+                theme.color
+              } hover:scale-105 transition-transform`}
             >
-              REGISTER
+              {isPending ? "SUBMITTING..." : "SUBMIT"}
             </button>
             <div className="flex items-center justify-around">
               <div className="w-24 h-[1px] bg-gray-500 "></div>
@@ -133,11 +197,13 @@ export default function Signup() {
 
         {/* Theme Buttons */}
       </div>
-         <div className="absolute top-10 right-5 flex gap-2">
+      <div className="absolute top-10 right-5 flex gap-2">
         {themes.map((t, i) => (
           <buttonm
             key={i}
-            className={`w-6 h-6 rounded-full ${t.background} ${t.id === theme.id ? "border" : ""}`}
+            className={`w-6 h-6 rounded-full ${t.background} ${
+              t.id === theme.id ? "border" : ""
+            }`}
             onClick={() => setTheme(t)}
             title={`Theme ${i + 1}`}
           />
